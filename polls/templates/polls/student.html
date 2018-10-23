@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>jQuery UI Button - Default functionality</title>
+    <script src="{{STATIC_URL}}js/jquery-1.9.1.js"></script>
+    <script src="{{STATIC_URL}}js/jquery-ui-1.10.3.custom.js"></script>
+    <link rel="stylesheet" href="{{STATIC_URL}}css/jquery-ui-1.10.3.custom.css">
+
+  <script>
+  $(function() {
+    $( "button" )
+      .button()
+      .click(function( event ) {
+        var postdata = {
+            'value1': 7,
+            'value2': 5
+        };
+        $.post('', postdata); // POST request to the same view I am now
+        window.alert("Hello world!"); // To know it is working
+      });
+  });
+  </script>
+</head>
+<body>
+
+<button>Submit</button>
+
+
+</body>
+</html>
