@@ -3,12 +3,13 @@ from django.http import Http404
 from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
 from django.forms.models import model_to_dict
+from django.utils import timezone
 
 from .models import Question
 from .models import Students
 from .models import Instructors
 from .models import AllProjects
-
+from .models import UpdatedProject
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -24,10 +25,10 @@ def detail(request, question_id):
 
 def login(request):
 
-	# if request.session.get('stud') != None:
-	# 	return redirect('polls:student_home')
-	# elif request.session.get('inst') != None:
-	# 	return redirect('polls:instructor_home')
+	if request.session.get('stud') != None:
+		return redirect('polls:student_home')
+	elif request.session.get('inst') != None:
+		return redirect('polls:instructor_home')
 
 	if request.method == "POST":
 
@@ -53,26 +54,70 @@ def student_home(request):
 	if request.session.get('stud') != None:
 
 		student_id = request.session['stud']
-		student = Students.objects.get(StudentID=student_id)
-		student = model_to_dict(student)
+		student1 = Students.objects.get(StudentID=student_id)
+		student = model_to_dict(student1)
 		# print(student_cpi)
 		
-		project_list = AllProjects.objects.filter(CPIcutoff__lte = student['CPI'] )
-
+		project_list = AllProjects.objects.filter(CPIcutoff__lte = student['CPI'], project_status=1)
+		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id)
+		# applied_projects = model_to_dict(applied_projects)
+		project2=[]
+		for i in applied_projects:
+			temp_proj = AllProjects.objects.get(pk=i)
+			project2.append(temp_proj)
+		print(project2)
+		project_list = set(project_list).difference(set(project2))
 		# resume_list = Resume.objects.filter(user = user).order_by("-timestamp")
-
 		# if request.session.get('resume_id') != None:
 		# 	del request.session['resume_id']
-
 		# request_list = Request.objects.filter(user_receiver = user)
-
 		# notifications = Notification.objects.filter(user_receiver = user)
 
-		return render(request, 'polls/student_home.html', {'project_list':project_list})
-
+		return render(request, 'polls/student_home.html', {'project_list':project_list,'project2':project2})
 	else:
-
 		return redirect('polls:login')
+
+def student_project_detail(request):
+	if request.method == "POST":
+		project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+		# print(model_to_dict(project))
+		return render(request, 'polls/student_project_detail.html',{'project':project})
+	else:
+		return redirect('polls:student_home')
+
+def student_project_apply(request):
+	if request.method == "POST":
+		project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		student_id = request.session['stud']
+		student = Students.objects.get(StudentID=student_id)
+		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+		project2 = UpdatedProject(StudentID=student,project=project,time=timezone.now())
+		project2.save()
+		# request.session["applied"] = 1
+		# print(model_to_dict(project))
+	return redirect('polls:student_home')
+
+def student_project_cancel(request):
+	if request.method == "POST":
+		project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		student_id = request.session['stud']
+		student = Students.objects.get(StudentID=student_id)
+		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+		UpdatedProject.objects.get(StudentID=student,project=project).delete()
+		# project2.save()
+		# request.session["applied"] = 1
+		# print(model_to_dict(project))
+	return redirect('polls:student_home')
+	
+def logout(request):
+	request.session.flush()
+
+	return redirect('polls:login')
+
 def results(request):
     response = "You're looking at the results of question."
     return HttpResponse(response)

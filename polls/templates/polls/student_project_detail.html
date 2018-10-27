@@ -1,0 +1,19 @@
+<h1 align="center">{{project.title}}</h1>
+<p><b>Instructor</b>: {{project.InstructorID.Name}}</p>
+<p><b>CPI cutoff</b>: {{project.CPIcutoff}}</p>
+<p><b>Maximum Students Eligible</b>: {{project.max_no_of_students}}</p>
+<h4>Description:</h4>
+<p>{{project.description}}</p>
+<p>
+	<form action={% url 'polls:student_home' %} method="post">{% csrf_token %}{{ form }}
+        <input type="submit" value="Home">
+    </form>
+</p>
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="logout">
+</form>

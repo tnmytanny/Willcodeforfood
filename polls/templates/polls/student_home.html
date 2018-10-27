@@ -5,8 +5,53 @@
     <th>Details</th>
     <th>Apply</th>
   </tr>
-  <tr>
   {% for projects in project_list %}
-    <li>{{projects.title}}</li>
+    <tr>
+      <td>{{projects.InstructorID.Name}}</td>
+      <td>{{projects.title}}</td>
+      <td>
+        <form action={% url 'polls:student_project_detail' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Details">
+        </form>
+      </td>
+      <td>
+        <form action={% url 'polls:student_project_apply' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Apply">
+        </form>
+      </td>
+    </tr>
   {% endfor %}
-<ul>
+  {% for projects in project2 %}
+    <tr>
+      <td>{{projects.InstructorID.Name}}</td>
+      <td>{{projects.title}}</td>
+      <td>
+        <form action={% url 'polls:student_project_detail' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Details">
+        </form>
+      </td>
+      <td>
+        <form action={% url 'polls:student_project_cancel' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Cancel">
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="logout">
+</form>

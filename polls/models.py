@@ -27,13 +27,17 @@ class Instructors(models.Model):
 
 class AllProjects(models.Model):
 	InstructorID = models.ForeignKey(Instructors,on_delete=models.CASCADE)
-	StudentID = models.ForeignKey(Students,on_delete=models.CASCADE)
 	ProjectID = models.CharField(max_length=20)
 	title = models.CharField(max_length=20)
-	description = models.CharField(max_length=50)
+	description = models.CharField(max_length=200)
 	CPIcutoff = models.CharField(max_length=5)
 	max_no_of_students = models.IntegerField(default=0)
 	project_status = models.IntegerField(default=1)
+
+class UpdatedProject(models.Model):
+	StudentID = models.ForeignKey(Students,on_delete=models.CASCADE)
+	project = models.ForeignKey(AllProjects,on_delete=models.CASCADE)
+	time = models.DateTimeField(default=timezone.now())
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
