@@ -1,0 +1,12 @@
+<table>
+  <tr>
+    <th>Instructor</th>
+    <th>Project Title</th>
+    <th>Details</th>
+    <th>Apply</th>
+  </tr>
+  <tr>
+  {% for projects in project_list %}
+    <li>{{projects.title}}</li>
+  {% endfor %}
+<ul>
