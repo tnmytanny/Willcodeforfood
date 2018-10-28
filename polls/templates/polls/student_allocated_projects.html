@@ -1,0 +1,66 @@
+<table>
+  <tr>
+    <th>Instructor</th>
+    <th>Project Title</th>
+    <th>Details</th>
+  </tr>
+  {% for projects in Allocated_projects_pending %}
+    <tr>
+      <td>{{projects.project.InstructorID.Name}}</td>
+      <td>{{projects.project.title}}</td>
+      <td>
+        <form action={% url 'polls:student_project_detail' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.project.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.project.InstructorID.InstructorID}}>
+          <input type="submit" value="Details">
+        </form>
+      </td>
+      <td>
+        <form action={% url 'polls:student_project_accept' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.project.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.project.InstructorID.InstructorID}}>
+          <input type="submit" value="Accept">
+        </form>
+      </td>
+      <td>
+        <form action={% url 'polls:student_project_reject' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.project.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.project.InstructorID.InstructorID}}>
+          <input type="submit" value="Reject">
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+
+  {% for projects in Allocated_projects_accepted %}
+    <tr>
+      <td>{{projects.project.InstructorID.Name}}</td>
+      <td>{{projects.project.title}}</td>
+      <td>
+        <form action={% url 'polls:student_project_detail' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.project.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.project.InstructorID.InstructorID}}>
+          <input type="submit" value="Details">
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+<form action={% url 'polls:student_home' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="Home">
+</form>
+
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="Logout">
+</form>

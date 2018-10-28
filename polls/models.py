@@ -38,6 +38,8 @@ class UpdatedProject(models.Model):
 	StudentID = models.ForeignKey(Students,on_delete=models.CASCADE)
 	project = models.ForeignKey(AllProjects,on_delete=models.CASCADE)
 	time = models.DateTimeField(default=timezone.now())
+	allocated = models.IntegerField(default=0)
+	accept = models.IntegerField(default=0)
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

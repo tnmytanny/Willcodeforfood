@@ -112,7 +112,42 @@ def student_project_cancel(request):
 		# request.session["applied"] = 1
 		# print(model_to_dict(project))
 	return redirect('polls:student_home')
-	
+
+def student_allocated_projects(request):
+	if request.session.get('stud') != None:
+		student_id = request.session['stud']
+
+		Allocated_projects_pending = UpdatedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 0)
+		Allocated_projects_accepted = UpdatedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 1)
+		return render(request, 'polls/student_allocated_projects.html', {'Allocated_projects_pending':Allocated_projects_pending, 'Allocated_projects_accepted':Allocated_projects_accepted})
+	else:
+		return redirect('polls:student_home')
+
+def student_project_accept(request):
+	if request.method == "POST":
+		student_id = request.session['stud']
+		project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		print(student_id)
+		print(project_id)
+		print(instructor_id)
+		UpdatedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).update(accept = 1)
+		# project2.save()
+		# print(project2)
+		return redirect('polls:student_allocated_projects')
+	else:
+		return redirect('polls:student_allocated_projects')
+
+def student_project_reject(request):
+	if request.method == "POST":
+		student_id = request.session['stud']
+		project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		UpdatedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).delete()
+		return redirect('polls:student_allocated_projects')
+	else:
+		return redirect('polls:student_allocated_projects')
+
 def logout(request):
 	request.session.flush()
 
