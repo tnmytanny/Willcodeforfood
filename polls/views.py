@@ -148,6 +148,103 @@ def student_project_reject(request):
 	else:
 		return redirect('polls:student_allocated_projects')
 
+def instructor_home(request):
+	if request.session.get('inst') != None:
+
+		instructor_id = request.session['inst']
+		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+		instructor = model_to_dict(instructor1)
+		# print(student_cpi)
+		
+		project_list = AllProjects.objects.filter(InstructorID__InstructorID = instructor['InstructorID'])#, project_status=1)
+		#applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=instructor_id)
+		# applied_projects = model_to_dict(applied_projects)
+		#project2=[]
+		#for i in applied_projects:
+		#	temp_proj = AllProjects.objects.get(pk=i)
+		#	project2.append(temp_proj)
+		#print(project2)
+		
+		#project_list = set(project_list).difference(set(project2))
+		
+		# resume_list = Resume.objects.filter(user = user).order_by("-timestamp")
+		# if request.session.get('resume_id') != None:
+		# 	del request.session['resume_id']
+		# request_list = Request.objects.filter(user_receiver = user)
+		# notifications = Notification.objects.filter(user_receiver = user)
+
+		return render(request, 'polls/instructor_home.html', {'project_list':project_list,'instructor_id':instructor_id})#,'project2':project2})
+	else:
+		return redirect('polls:login')
+
+def instructor_project_detail(request):
+	if request.method == "POST":
+		project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+		# print(model_to_dict(project))
+		return render(request, 'polls/instructor_project_detail.html',{'project':project})
+	else:
+		return redirect('polls:instructor_home')
+
+def instructor_project_edit(request):
+	if request.method == "POST":
+		project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+		# print(model_to_dict(project))
+		return render(request, 'polls/instructor_project_edit.html',{'project':project})
+	else:
+		return redirect('polls:instructor_home')
+
+def instructor_project_change(request):
+	if request.method == "POST":
+		project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+		title = request.POST["title"]
+		description = request.POST["description"]
+		CPIcutoff = request.POST["CPIcutoff"]
+		max_no_of_students = request.POST["max_no_of_students"]
+		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+		project.InstructorID=instructor1
+		project.description='testing'
+		#project.title=title
+		project.CPIcutoff=CPIcutoff
+		project.max_no_of_students=max_no_of_students
+		project.save()
+		# print(model_to_dict(project))
+		return render(request, 'polls/instructor_home.html',{'instructorid':instructor_id})
+	else:
+		return redirect('polls:instructor_home')
+
+def instructor_new_project(request):
+	if request.method == "POST":
+		#project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		#project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+		# print(model_to_dict(project))
+		return render(request, 'polls/instructor_new_project.html',{'instructor_id':instructor_id})
+	else:
+		return redirect('polls:instructor_home')
+
+def instructor_add_project(request):
+	if request.method == "POST":
+		#project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+		title = request.POST["title"]
+		description = request.POST["description"]
+		CPIcutoff = request.POST["CPIcutoff"]
+		max_no_of_students = request.POST["max_no_of_students"]
+		###How to add project id??
+		project = AllProjects(InstructorID=instructor1, title=title,description=description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students)
+		project.save()
+		# print(model_to_dict(project))
+		return render(request, 'polls/instructor_home.html')
+	else:
+		return redirect('polls:instructor_home')
+
 def logout(request):
 	request.session.flush()
 

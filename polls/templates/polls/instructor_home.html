@@ -1,0 +1,55 @@
+<table>
+  <tr>
+    <th>Instructor</th>
+    <th>Project Title</th>
+    <th>Details</th>
+    <th></th>
+  </tr>
+  {% for projects in project_list %}
+    <tr>
+      <td>{{projects.title}}</td>
+      <td>
+        <form action={% url 'polls:instructor_project_detail' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Details">
+        </form>
+      </td>
+      <td>
+        <form action={% url 'polls:instructor_project_edit' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Edit">
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+
+</table>
+
+<form action={% url 'polls:instructor_new_project' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label> -->
+      <input name="instructorid" type="hidden" value={{instructor_id}}>
+      <input type="submit" value="Add new project">
+</form>
+
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="logout">
+</form>
+
+
+<form action={% url 'polls:student_allocated_projects' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="Allocated Projects">
+</form>

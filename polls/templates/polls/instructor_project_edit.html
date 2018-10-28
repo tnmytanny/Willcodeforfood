@@ -1,0 +1,26 @@
+<h1 align="center">{{project.title}}</h1>
+<p>
+	<form action={% url 'polls:instructor_project_change' %} method="post">{% csrf_token %}{{ form }}
+    <input type="hidden" name="projectid" value={{project.ProjectID}}>
+    <input type="hidden" name="title" value={{project.title}}>
+    <input type="hidden" name="instructorid" value={{project.InstructorID.InstructorID}}>
+    <p><b>CPI cutoff</b>: <input type="number" step="0.1" name="CPIcutoff" value={{project.CPIcutoff}}></p>
+    <p><b>Maximum Students Eligible</b>: <input type="number" name="max_no_of_students" value={{project.max_no_of_students}}></p>
+    <h4>Description:</h4>
+        <input type="text" name="description" value={{project.description}}>
+    <input type="submit" value="Edit">
+    </form>
+</p>
+<p>
+	<form action={% url 'polls:instructor_home' %} method="post">{% csrf_token %}{{ form }}
+        <input type="submit" value="Home">
+    </form>
+</p>
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="logout">
+</form>

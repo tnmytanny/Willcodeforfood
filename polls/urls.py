@@ -18,6 +18,12 @@ urlpatterns = [
     path('student_project_accept/', views.student_project_accept, name='student_project_accept'),
     path('student_project_reject/', views.student_project_reject, name='student_project_reject'),
 
+    path('instructor_home/', views.instructor_home, name='instructor_home'),
+    path('instructor_project_detail/', views.instructor_project_detail, name='instructor_project_detail'),
+    path('instructor_new_project/', views.instructor_new_project, name='instructor_new_project'),
+    path('instructor_add_project/', views.instructor_add_project, name='instructor_add_project'),
+    path('instructor_project_change/', views.instructor_project_change, name='instructor_project_change'),    
+    path('instructor_project_edit/', views.instructor_project_edit, name='instructor_project_edit'),    
     path('logout/', views.logout, name='logout'),
     path('results/', views.results, name='results'),
     # ex: /polls/5/vote/
