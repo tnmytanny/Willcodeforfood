@@ -201,20 +201,20 @@ def instructor_project_change(request):
 	if request.method == "POST":
 		project_id = request.POST["projectid"]
 		instructor_id = request.POST["instructorid"]
-		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+		# instructor1 = Instructors.objects.get(InstructorID=instructor_id)
 		title = request.POST["title"]
 		description = request.POST["description"]
 		CPIcutoff = request.POST["CPIcutoff"]
 		max_no_of_students = request.POST["max_no_of_students"]
-		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
-		project.InstructorID=instructor1
-		project.description='testing'
+		AllProjects.objects.filter(ProjectID=project_id, InstructorID__InstructorID=instructor_id).update(description = description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students)
+		# project.InstructorID=instructor1
+		# project.description='testing'
 		#project.title=title
-		project.CPIcutoff=CPIcutoff
-		project.max_no_of_students=max_no_of_students
-		project.save()
+		# project.CPIcutoff=CPIcutoff
+		# project.max_no_of_students=max_no_of_students
+		# project.save()
 		# print(model_to_dict(project))
-		return render(request, 'polls/instructor_home.html',{'instructorid':instructor_id})
+		return redirect('polls:instructor_home')
 	else:
 		return redirect('polls:instructor_home')
 
