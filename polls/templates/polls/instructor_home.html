@@ -45,7 +45,7 @@
 </form>
 
 
-<form action={% url 'polls:student_allocated_projects' %} method="post">
+<form action={% url 'polls:instructor_allocated_projects' %} method="post">
     {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label>

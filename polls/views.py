@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
 from django.forms.models import model_to_dict
 from django.utils import timezone
-
+from django.db.models import Max
 from .models import Question
 from .models import Students
 from .models import Instructors
@@ -59,7 +59,7 @@ def student_home(request):
 		# print(student_cpi)
 		
 		project_list = AllProjects.objects.filter(CPIcutoff__lte = student['CPI'], project_status=1)
-		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id)
+		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1)
 		# applied_projects = model_to_dict(applied_projects)
 		project2=[]
 		for i in applied_projects:
@@ -228,22 +228,48 @@ def instructor_new_project(request):
 	else:
 		return redirect('polls:instructor_home')
 
-def instructor_add_project(request):
+def instructor_project_create(request):
 	if request.method == "POST":
-		#project_id = request.POST["projectid"]
 		instructor_id = request.POST["instructorid"]
 		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+		project_id = AllProjects.objects.values_list('ProjectID','InstructorID').filter(InstructorID__InstructorID=instructor_id).aggregate(Max('ProjectID'))
+		# print(project_id)
 		title = request.POST["title"]
 		description = request.POST["description"]
 		CPIcutoff = request.POST["CPIcutoff"]
 		max_no_of_students = request.POST["max_no_of_students"]
-		###How to add project id??
-		project = AllProjects(InstructorID=instructor1, title=title,description=description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students)
+		projectid = project_id['ProjectID__max'] + 1
+		project = AllProjects(InstructorID=instructor1,ProjectID=projectid, title=title,description=description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students)
 		project.save()
-		# print(model_to_dict(project))
-		return render(request, 'polls/instructor_home.html')
+
+	return redirect('polls:instructor_home')
+def instructor_allocated_projects(request):
+	if request.session.get('inst') != None:
+		instructor_id = request.session['inst']
+
+		# Allocated_projects_pending = UpdatedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 0)
+		Allocated_projects_accepted = AllProjects.objects.filter(InstructorID__InstructorID = instructor_id, project_status=0)
+		print(instructor_id)
+		return render(request, 'polls/instructor_allocated_projects.html', {'Allocated_projects_accepted':Allocated_projects_accepted})
 	else:
-		return redirect('polls:instructor_home')
+		return redirect('polls:login')
+
+# def instructor_add_project(request):
+# 	if request.method == "POST":
+# 		#project_id = request.POST["projectid"]
+# 		instructor_id = request.POST["instructorid"]
+# 		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+# 		title = request.POST["title"]
+# 		description = request.POST["description"]
+# 		CPIcutoff = request.POST["CPIcutoff"]
+# 		max_no_of_students = request.POST["max_no_of_students"]
+# 		###How to add project id??
+# 		project = AllProjects(InstructorID=instructor1, title=title,description=description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students)
+# 		project.save()
+# 		# print(model_to_dict(project))
+# 		return render(request, 'polls/instructor_home.html')
+# 	else:
+# 		return redirect('polls:instructor_home')
 
 def logout(request):
 	request.session.flush()
