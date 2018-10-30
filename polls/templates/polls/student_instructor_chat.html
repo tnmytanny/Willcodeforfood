@@ -1,0 +1,36 @@
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Project Title</th>
+    <th>Details</th>
+    <th></th>
+  </tr>
+  {% for chats in messages %}
+    <tr>
+      <td>{{chats.SenderID}}</td>
+      <td>{{chats.ReceiverID}}</td>
+      <td>{{chats.StudentID}}</td>
+      <td>{{chats.InstructorD}}</td>
+    </tr>
+  {% endfor %}
+
+</table>
+
+<form action={% url 'polls:student_new_message' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label> -->
+      <input id="message" type="text" name="message">
+      <input name="instructorid" type="hidden" value={{instructor_id}}>
+      <!--<input name="timestamp" type="hidden" value={{instructor_id}}>-->
+      <input type="Submit" value="Send">
+</form>
+
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="logout">
+</form>

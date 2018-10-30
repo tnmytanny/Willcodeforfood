@@ -37,7 +37,7 @@ class AllProjects(models.Model):
 class UpdatedProject(models.Model):
 	StudentID = models.ForeignKey(Students,on_delete=models.CASCADE)
 	project = models.ForeignKey(AllProjects,on_delete=models.CASCADE)
-	time = models.DateTimeField(default=timezone.now())
+	time = models.DateTimeField(default=timezone.now)
 	allocated = models.IntegerField(default=0)
 	accept = models.IntegerField(default=0)
 
@@ -47,3 +47,12 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
+
+class Message(models.Model):
+	StudentID = models.ForeignKey(Students,on_delete=models.CASCADE)
+	InstructorID = models.ForeignKey(Instructors,on_delete=models.CASCADE)
+	SenderID = models.CharField(max_length=20)
+	ReceiverID = models.CharField(max_length=20)
+	MessageID = models.CharField(max_length=20)
+	message = models.CharField(max_length=200)
+	timestamp = models.DateTimeField(default=timezone.now)

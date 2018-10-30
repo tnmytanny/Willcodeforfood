@@ -23,6 +23,12 @@
           <input type="submit" value="Apply">
         </form>
       </td>
+      <td>
+        <form action={% url 'polls:student_inst_chat' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Chat">
+        </form>
+      </td>
     </tr>
   {% endfor %}
   {% for projects in project2 %}
@@ -41,6 +47,12 @@
           <input type="hidden" name="projectid" value={{projects.ProjectID}}>
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
           <input type="submit" value="Cancel">
+        </form>
+      </td>
+      <td>
+        <form action={% url 'polls:student_inst_chat' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Chat">
         </form>
       </td>
     </tr>
