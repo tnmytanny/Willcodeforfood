@@ -1,21 +1,22 @@
-<table>
-  <tr>
-    <th>Project Title</th>
-    <th>Project description</th>
-    <th>CPI cut off</th>
-    <th>maximum number of students</th>
-  </tr>
-  <tr>
-<form action={% url 'polls:instructor_add_project' %} method="post">
-	{% csrf_token %}
-    {{ form }}
-    <input id="title" type="text" name="title">
-    <input id="description" type="text" name="description">
-    <input id="CPIcutoff" type="number" step="0.1" name="CPIcutoff">
-    <input id="max_no_of_students" type="text" name="max_no_of_students">
-    <input name="instructorid" type="hidden" value={{instructor_id}}>
-
-    <input type="submit" value="Add project">
+<form action={% url 'polls:instructor_project_create' %} method="post">{% csrf_token %}{{ form }}
+  <input type="hidden" name="instructorid" value={{instructor_id}}>
+  <p><b>Title</b>:<input type="text" name="title"></p>
+  <p><b>CPI cutoff</b>: <input type="number" step="0.1" name="CPIcutoff"></p>
+  <p><b>Maximum Students Eligible</b>: <input type="number" name="max_no_of_students" value={{project.max_no_of_students}}></p>
+  <h4>Description:</h4>
+      <input type="text" name="description" value={{project.description}}>
+  <p><input type="submit" value="Save"></p>
 </form>
-</tr>
-</table>
+<p>
+	<form action={% url 'polls:instructor_home' %} method="post">{% csrf_token %}{{ form }}
+        <input type="submit" value="Home">
+    </form>
+</p>
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="logout">
+</form>

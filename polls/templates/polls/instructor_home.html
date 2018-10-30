@@ -52,7 +52,11 @@
 </form>
 
 
+<<<<<<< HEAD
 <form action={% url 'polls:instructor_home' %} method="post">
+=======
+<form action={% url 'polls:instructor_allocated_projects' %} method="post">
+>>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d
     {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label>

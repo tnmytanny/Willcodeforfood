@@ -12,7 +12,7 @@ class Question(models.Model):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
 class Students(models.Model):
-	StudentID = models.CharField(max_length=20)
+	StudentID = models.IntegerField(default=0)
 	Name = models.CharField(max_length=30)
 	Password = models.CharField(max_length=20)
 	CPI = models.CharField(max_length=5,default='0.00')
@@ -21,13 +21,13 @@ class Students(models.Model):
 	Branch = models.CharField(max_length=20,default='')
 
 class Instructors(models.Model):
-	InstructorID = models.CharField(max_length=20)
+	InstructorID = models.IntegerField(default=0)
 	Name = models.CharField(max_length=30)
 	Password = models.CharField(max_length=20)
 
 class AllProjects(models.Model):
 	InstructorID = models.ForeignKey(Instructors,on_delete=models.CASCADE)
-	ProjectID = models.CharField(max_length=20)
+	ProjectID = models.IntegerField(default=0)
 	title = models.CharField(max_length=20)
 	description = models.CharField(max_length=200)
 	CPIcutoff = models.CharField(max_length=5)
