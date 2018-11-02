@@ -1,8 +1,53 @@
-<form action={% url 'polls:login' %} method="post">
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.container {
+    padding: 16px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+</style>
+</head>
+<form class="modal-content" action={% url 'polls:login' %} method="post">
 	{% csrf_token %}
     {{ form }}
+ <div class="container">
     <label for="UserID">UserID: </label>
-    <input id="UserID" type="text" name="userid">
-    <input id="password" type="text" name="password">
-    <input type="submit" value="Login">
+    <input id="UserID" type="text" placeholder="Enter Username" name="userid" required>
+    <label for="password">Password: </label>
+    <input id="password" type="text" placeholder="Enter Password" name="password">
+    <button type="submit" value="Login"> login </button>
+</div>
 </form>
+
+
+
+</html>
