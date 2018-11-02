@@ -25,14 +25,14 @@ urlpatterns = [
     path('instructor_new_project/', views.instructor_new_project, name='instructor_new_project'),
     path('instructor_project_create/', views.instructor_project_create, name='instructor_project_create'),
     path('instructor_project_change/', views.instructor_project_change, name='instructor_project_change'),    
-<<<<<<< HEAD
+# <<<<<<< HEAD
     path('instructor_project_edit/', views.instructor_project_edit, name='instructor_project_edit'),  
     path('instructor_project_delete/', views.instructor_project_delete, name='instructor_project_delete'),
-    path('instructor_project_remove/', views.instructor_project_remove, name='instructor_project_remove'),    
-=======
+    # path('instructor_project_remove/', views.instructor_project_remove, name='instructor_project_remove'),    
+# =======
     path('instructor_project_edit/', views.instructor_project_edit, name='instructor_project_edit'),
     path('instructor_allocated_projects/', views.instructor_allocated_projects, name='instructor_allocated_projects'),  
->>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d
+# >>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d
     path('logout/', views.logout, name='logout'),
     path('results/', views.results, name='results'),
     # ex: /polls/5/vote/

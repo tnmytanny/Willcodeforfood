@@ -213,8 +213,8 @@ def instructor_project_detail(request):
 		project_id = request.POST["projectid"]
 		
 		instructor_id = request.session['inst']
-		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
-		instructor_id = instructor['InstructorID']
+		# instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+		# instructor_id = instructor1['InstructorID']
 
 		#instructor_id = request.POST["instructorid"]
 		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
@@ -233,21 +233,21 @@ def instructor_project_edit(request):
 	else:
 		return redirect('polls:instructor_home')
 
+# def instructor_project_delete(request):
+# 	if request.method == "POST":
+# 		project_id = request.POST["projectid"]
+# 		instructor_id = request.POST["instructorid"]
+# 		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+# 		# print(model_to_dict(project))
+# 		return render(request, 'polls/instructor_project_delete.html',{'project':project})
+# 	else:
+# 		return redirect('polls:instructor_home')
+
 def instructor_project_delete(request):
 	if request.method == "POST":
 		project_id = request.POST["projectid"]
 		instructor_id = request.POST["instructorid"]
-		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
-		# print(model_to_dict(project))
-		return render(request, 'polls/instructor_project_delete.html',{'project':project})
-	else:
-		return redirect('polls:instructor_home')
-
-def instructor_project_remove(request):
-	if request.method == "POST":
-		project_id = request.POST["projectid"]
-		instructor_id = request.POST["instructorid"]
-		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+		# instructor1 = Instructors.objects.get(InstructorID=instructor_id)
 		#title = request.POST["title"]
 		#description = request.POST["description"]
 		#CPIcutoff = request.POST["CPIcutoff"]
@@ -258,9 +258,11 @@ def instructor_project_remove(request):
 		#project.title=title
 		#project.CPIcutoff=CPIcutoff
 		#project.max_no_of_students=max_no_of_students
+		project2 = UpdatedProject.objects.filter(project=project)
 		project.delete()
+		project2.delete()
 		# print(model_to_dict(project))
-		return render(request, 'polls/instructor_home.html',{'instructorid':instructor_id})
+		return redirect('polls:instructor_home')
 	else:
 		return redirect('polls:instructor_home')
 
@@ -273,15 +275,15 @@ def instructor_project_change(request):
 		description = request.POST["description"]
 		CPIcutoff = request.POST["CPIcutoff"]
 		max_no_of_students = request.POST["max_no_of_students"]
-<<<<<<< HEAD
+# <<<<<<< HEAD
 		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
 		project.InstructorID=instructor1
 		project.description=description
-=======
+# =======
 		AllProjects.objects.filter(ProjectID=project_id, InstructorID__InstructorID=instructor_id).update(description = description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students)
 		# project.InstructorID=instructor1
 		# project.description='testing'
->>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d
+# >>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d
 		#project.title=title
 		# project.CPIcutoff=CPIcutoff
 		# project.max_no_of_students=max_no_of_students
