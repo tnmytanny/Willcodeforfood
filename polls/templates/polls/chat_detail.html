@@ -1,36 +1,66 @@
-<table>
-  <tr>
-    <th>SenderID</th>
-    <th>ReceiverrID</th>
-    <th>message</th>
-    <th>timestamp</th>
-  </tr>
-  {% for messages in message %}
-    <tr>
-      <td>
-        {% if messages.SenderID == 'S' %}
-          {{messages.MessageID.StudentID.StudentID}}
-        {% elif messages.SenderID == 'I' %}
-          {{messages.MessageID.InstructorID.InstructorID}}
-        {% endif %}
+<style>
+.container {
+    border-radius: 25px;
+    background-color: lightgrey;
+    width: 50%;
+    padding: 5px;
+    float: left;
+    margin: 5px;
+    padding-left: 10px;
+}
 
-      </td>
-      <td>
-        {% if messages.SenderID == 'S' %}
-          {{messages.MessageID.InstructorID.InstructorID}}
-        {% elif messages.SenderID == 'I' %}
-          {{messages.MessageID.StudentID.StudentID}}
-        {% endif %}
-      </td>
-      <td>
-        {{messages.message}}
-      </td>
-      <td>
-        {{messages.timestamp}}
-      </td>
-    </tr>
-  {% endfor %}
-</table>
+.darker {
+    border-radius: 25px;
+    background-color: lightblue;
+    width: 50%;
+    float: right;
+    text-align: right;
+    padding: 5px;
+    margin: 5px;
+    padding-top: 0px;
+    padding-right: 10px;
+}
+
+.time-right {
+  font-size: 15;
+  float: right;
+  color: #aaa;
+}
+.time-left {
+  font-size: 15;
+  float: left;
+  color: #999;
+}
+</style>
+{% for messages in message %}
+  {% if loginid == 'S' %}
+    {% if messages.SenderID == 'S' %}
+      <div class="darker">
+        <p>{{messages.message}}</p>
+        <span class="time-right">{{messages.timestamp}}</span>
+      </div>
+
+    {% elif messages.SenderID == 'I' %}
+      <div class="container">
+        <p>{{messages.message}}</p>
+        <span class="time-left">{{messages.timestamp}}</span>
+      </div>
+    {% endif %}
+  {% elif loginid == 'I' %}
+    {% if messages.SenderID == 'I' %}
+      <div class="darker">
+        <p>{{messages.message}}</p>
+        <span class="time-right">{{messages.timestamp}}</span>
+      </div>
+
+    {% elif messages.SenderID == 'S' %}
+      <div class="container">
+        <p>{{messages.message}}</p>
+        <span class="time-left">{{messages.timestamp}}</span>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endfor %}
 
 <form action={% url 'polls:login' %} method="post">
     {% csrf_token %}
