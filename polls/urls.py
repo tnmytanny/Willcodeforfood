@@ -19,6 +19,9 @@ urlpatterns = [
     path('student_project_reject/', views.student_project_reject, name='student_project_reject'),
     path('student_inst_chat/', views.student_inst_chat, name='student_inst_chat'),
     path('student_new_message/', views.student_new_message, name='student_new_message'),
+    path('student_create_chat/', views.student_create_chat, name='student_create_chat'),
+    path('student_show_messages/', views.student_show_messages, name='student_show_messages'),
+    path('chat_detail/', views.chat_detail, name='chat_detail'),
 
     path('instructor_home/', views.instructor_home, name='instructor_home'),
     path('instructor_project_detail/', views.instructor_project_detail, name='instructor_project_detail'),

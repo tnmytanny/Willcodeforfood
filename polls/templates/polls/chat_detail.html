@@ -1,0 +1,49 @@
+<table>
+  <tr>
+    <th>SenderID</th>
+    <th>ReceiverrID</th>
+    <th>message</th>
+    <th>timestamp</th>
+  </tr>
+  {% for messages in message %}
+    <tr>
+      <td>
+        {% if messages.SenderID == 'S' %}
+          {{messages.MessageID.StudentID.StudentID}}
+        {% elif messages.SenderID == 'I' %}
+          {{messages.MessageID.InstructorID.InstructorID}}
+        {% endif %}
+
+      </td>
+      <td>
+        {% if messages.SenderID == 'S' %}
+          {{messages.MessageID.InstructorID.InstructorID}}
+        {% elif messages.SenderID == 'I' %}
+          {{messages.MessageID.StudentID.StudentID}}
+        {% endif %}
+      </td>
+      <td>
+        {{messages.message}}
+      </td>
+      <td>
+        {{messages.timestamp}}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+<form action={% url 'polls:login' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label> -->
+      <input type="submit" value="Home">
+</form>
+
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="logout">
+</form>

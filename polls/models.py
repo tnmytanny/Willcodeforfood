@@ -48,11 +48,13 @@ class Choice(models.Model):
     def __str__(self):
         return self.choice_text
 
-class Message(models.Model):
+class Chats(models.Model):
 	StudentID = models.ForeignKey(Students,on_delete=models.CASCADE)
 	InstructorID = models.ForeignKey(Instructors,on_delete=models.CASCADE)
+
+class Message(models.Model):
+	MessageID = models.ForeignKey(Chats,on_delete=models.CASCADE)
 	SenderID = models.CharField(max_length=20)
 	ReceiverID = models.CharField(max_length=20)
-	MessageID = models.CharField(max_length=20)
 	message = models.CharField(max_length=200)
 	timestamp = models.DateTimeField(default=timezone.now)

@@ -68,7 +68,6 @@
       <input type="submit" value="logout">
 </form>
 
-
 <form action={% url 'polls:student_allocated_projects' %} method="post">
     {% csrf_token %}
       {{ form }}
@@ -76,4 +75,23 @@
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
       <input type="submit" value="Allocated Projects">
+</form>
+
+<form action={% url 'polls:student_show_messages' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <input type="submit" value="Messages">
+</form>
+
+
+<form action={% url 'polls:student_create_chat' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label> -->
+      <input id="instructorid" type="text" name="instructorid">
+      <!-- <input id="password" type="text" name="password"> -->
+      <input type="submit" value="Create Message">
 </form>

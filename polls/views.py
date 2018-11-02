@@ -11,6 +11,7 @@ from .models import Instructors
 from .models import AllProjects
 from .models import UpdatedProject
 from .models import Message
+from .models import Chats
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -149,6 +150,42 @@ def student_project_reject(request):
 	else:
 		return redirect('polls:student_allocated_projects')
 
+def student_create_chat(request):
+	if request.method == "POST":
+		student_id = request.session['stud']
+		#project_id = request.POST["projectid"]
+		instructor_id = request.POST["instructorid"]
+		student = Students.objects.get(StudentID=student_id)
+		instructor = Instructors.objects.get(InstructorID=instructor_id)
+		chat = Chats(StudentID=student,InstructorID=instructor)
+		chat.save()
+	return redirect('polls:student_home')
+
+def student_show_messages(request):
+	if request.method == "POST":
+		student_id = request.session['stud']
+		chat = Chats.objects.filter(StudentID__StudentID=student_id)
+		return render(request,'polls/student_show_messages.html',{'chat':chat})
+	else:
+		return redirect('polls:student_home')
+
+def chat_detail(request):
+	if request.method == "POST":
+		if request.session.get('stud') != None:
+			student_id = request.POST["studentid"]
+			instructor_id = request.POST["instructorid"]
+			login_id = request.POST["loginid"]
+			print(instructor_id)
+			print(student_id)
+			print(login_id)
+			
+			chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			message = Message.objects.filter(MessageID=chat)
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id})
+		elif request.session.get('inst') != None:
+			return redirect('polls:instructor_home')
+	else:
+		return redirect('polls:login')
 def student_inst_chat(request):
 	if request.method == "POST":
 		student_id = request.session['stud']
