@@ -172,7 +172,7 @@ def student_show_messages(request):
 def chat_detail(request):
 	if request.method == "POST":
 		if request.session.get('stud') != None:
-			student_id = request.POST["studentid"]
+			student_id = request.session["stud"]
 			instructor_id = request.POST["instructorid"]
 			login_id = request.POST["loginid"]
 			print(instructor_id)
@@ -186,35 +186,35 @@ def chat_detail(request):
 			return redirect('polls:instructor_home')
 	else:
 		return redirect('polls:login')
-def student_inst_chat(request):
-	if request.method == "POST":
-		student_id = request.session['stud']
-		#project_id = request.POST["projectid"]
-		instructor_id = request.POST["instructorid"]
-		messages = Message.objects.filter(StudentID=student_id, InstructorID__InstructorID=instructor_id)
-		#UpdatedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).delete()
-		return render(request,'polls/student_instructor_chat.html',{'messages':messages,'student_id':student_id,'instructor_id':instructor_id})
-	else:
-		return render(request,'polls/student_instructor_chat.html')
+# def student_inst_chat(request):
+# 	if request.method == "POST":
+# 		student_id = request.session['stud']
+# 		#project_id = request.POST["projectid"]
+# 		instructor_id = request.POST["instructorid"]
+# 		messages = Message.objects.filter(StudentID=student_id, InstructorID__InstructorID=instructor_id)
+# 		#UpdatedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).delete()
+# 		return render(request,'polls/student_instructor_chat.html',{'messages':messages,'student_id':student_id,'instructor_id':instructor_id})
+# 	else:
+# 		return render(request,'polls/student_instructor_chat.html')
 
-def student_new_message(request):
-	if request.method == "POST":
-		student_id = request.session['stud']
-		student1 = Students.objects.get(StudentID=student_id)
-		#project_id = request.POST["projectid"]
-		instructor_id = request.POST["instructorid"]
-		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
-		message = request.POST["message"]
-		#timestamp = request.POST["timestamp"]
-		#print (message)
-		message = Message(InstructorID=instructor1, StudentID=student1,SenderID=student_id,ReceiverID=instructor_id,message=message)
-		message.save()
-		messages = Message.objects.filter(StudentID=student_id, InstructorID__InstructorID=instructor_id)
-		#m1 = model_to_dict(messages)
-		#print (m1)
-		return render(request,'polls/student_instructor_chat.html',{'messages':messages,'student_id':student_id,'instructor_id':instructor_id})#,{'instructorid':instructor_id})#,{'messages':messages,'student_id':student_id.StudentID})
-	else:
-		return render(request,'polls/student_instructor_chat.html')
+# def student_new_message(request):
+# 	if request.method == "POST":
+# 		student_id = request.session['stud']
+# 		student1 = Students.objects.get(StudentID=student_id)
+# 		#project_id = request.POST["projectid"]
+# 		instructor_id = request.POST["instructorid"]
+# 		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+# 		message = request.POST["message"]
+# 		#timestamp = request.POST["timestamp"]
+# 		#print (message)
+# 		message = Message(InstructorID=instructor1, StudentID=student1,SenderID=student_id,ReceiverID=instructor_id,message=message)
+# 		message.save()
+# 		messages = Message.objects.filter(StudentID=student_id, InstructorID__InstructorID=instructor_id)
+# 		#m1 = model_to_dict(messages)
+# 		#print (m1)
+# 		return render(request,'polls/student_instructor_chat.html',{'messages':messages,'student_id':student_id,'instructor_id':instructor_id})#,{'instructorid':instructor_id})#,{'messages':messages,'student_id':student_id.StudentID})
+# 	else:
+# 		return render(request,'polls/student_instructor_chat.html')
 
 def instructor_home(request):
 	if request.session.get('inst') != None:

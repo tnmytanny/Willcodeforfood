@@ -198,8 +198,9 @@ table tr:nth-child(2n+1) {
         </form>
       </td>
       <td>
-        <form action={% url 'polls:student_inst_chat' %} method="post">{% csrf_token %}{{ form }}
+        <form action={% url 'polls:chat_detail' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="hidden" name="loginid" value='S'>
           <input type="submit" value="Chat">
         </form>
       </td>
@@ -224,8 +225,9 @@ table tr:nth-child(2n+1) {
         </form>
       </td>
       <td>
-        <form action={% url 'polls:student_inst_chat' %} method="post">{% csrf_token %}{{ form }}
+        <form action={% url 'polls:chat_detail' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="hidden" name="loginid" value='S'>
           <input type="submit" value="Chat">
         </form>
       </td>
@@ -268,7 +270,7 @@ table tr:nth-child(2n+1) {
       <!-- <label for="UserID">UserID: </label> -->
       <input id="instructorid" type="text" name="instructorid">
       <!-- <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Create Message">
+      <input type="submit" value="Create Chat">
 </form>
 
 
