@@ -17,6 +17,7 @@ urlpatterns = [
     path('student_allocated_projects/', views.student_allocated_projects, name='student_allocated_projects'),
     path('student_project_accept/', views.student_project_accept, name='student_project_accept'),
     path('student_project_reject/', views.student_project_reject, name='student_project_reject'),
+    path('student_filter_project/', views.student_filter_project, name='student_filter_project'),
     # path('student_inst_chat/', views.student_inst_chat, name='student_inst_chat'),
     # path('student_new_message/', views.student_new_message, name='student_new_message'),
     path('student_create_chat/', views.student_create_chat, name='student_create_chat'),

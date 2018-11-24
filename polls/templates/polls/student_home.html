@@ -169,6 +169,16 @@ table tr:nth-child(2n+1) {
 
 </style>
 
+<form action={% url 'polls:student_filter_project' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label> -->
+      <input id="filter_tag" type="text" name="filter_tag">
+      <!-- <input id="password" type="text" name="password"> -->
+      <input type="submit" value="Filter">
+</form>
+
+
 <div class="table-users">
     <div class="header">Users</div>
  

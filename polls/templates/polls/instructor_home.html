@@ -184,8 +184,8 @@
       <td>{{projects.title}}</td>
       <td>
         <form action={% url 'polls:instructor_project_detail' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="status" value='0'>
           <input type="hidden" name="projectid" value={{projects.ProjectID}}>
-          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
           <input type="submit" value="Details">
         </form>
       </td>

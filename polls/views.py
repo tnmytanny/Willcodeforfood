@@ -73,7 +73,6 @@ def student_home(request):
 		# applied_projects = model_to_dict(applied_projects)
 		project2=[]
 		for i in applied_projects:
-			print('kskajsaks',i)
 			temp_proj = AllProjects.objects.get(pk=i)
 			project2.append(temp_proj)
 		# resume_list = Resume.objects.filter(user = user).order_by("-timestamp")
@@ -157,6 +156,39 @@ def student_project_reject(request):
 	else:
 		return redirect('polls:student_allocated_projects')
 
+def student_filter_project(request):
+	if request.method == "POST":
+		filter_tag = request.POST["filter_tag"]
+		student_id = request.session['stud']
+		student1 = Students.objects.get(StudentID=student_id)
+		student = model_to_dict(student1)
+		# print(student_cpi)
+		
+		project_list = AllProjects.objects.filter(CPIcutoff__lte = student['CPI'], project_status=1,tag__contains=filter_tag)
+		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1)
+		# applied_projects = model_to_dict(applied_projects)
+		project2=[]
+		for i in applied_projects:
+			temp_proj = AllProjects.objects.get(pk=i)
+			project2.append(temp_proj)
+		print(project2)
+		project_list = set(project_list).difference(set(project2))
+		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1,accept=0,project__tag__contains=filter_tag)
+		# applied_projects = model_to_dict(applied_projects)
+		project2=[]
+		for i in applied_projects:
+			temp_proj = AllProjects.objects.get(pk=i)
+			project2.append(temp_proj)
+		# resume_list = Resume.objects.filter(user = user).order_by("-timestamp")
+		# if request.session.get('resume_id') != None:
+		# 	del request.session['resume_id']
+		# request_list = Request.objects.filter(user_receiver = user)
+		# notifications = Notification.objects.filter(user_receiver = user)
+
+		return render(request, 'polls/student_home.html', {'project_list':project_list,'project2':project2})
+	else:
+		return redirect('polls:login')
+
 def student_create_chat(request):
 	if request.method == "POST":
 		student_id = request.session['stud']
@@ -164,9 +196,12 @@ def student_create_chat(request):
 		instructor_id = request.POST["instructorid"]
 		student = Students.objects.get(StudentID=student_id)
 		instructor = Instructors.objects.get(InstructorID=instructor_id)
-		chat = Chats(StudentID=student,InstructorID=instructor)
-		print("hey",chat)
-		chat.save()
+		already_chat = Chats.objects.filter(StudentID=student,InstructorID=instructor)
+		print(already_chat)
+		if not already_chat:
+			chat = Chats(StudentID=student,InstructorID=instructor)
+			print("hey",chat)
+			chat.save()
 	return redirect('polls:student_home')
 
 def student_show_messages(request):
@@ -275,16 +310,29 @@ def instructor_home(request):
 
 def instructor_project_detail(request):
 	if request.method == "POST":
+		status = request.POST["status"]
 		project_id = request.POST["projectid"]
 		
 		instructor_id = request.session['inst']
 		# instructor1 = Instructors.objects.get(InstructorID=instructor_id)
 		# instructor_id = instructor1['InstructorID']
-
 		#instructor_id = request.POST["instructorid"]
 		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
+		if status=='1':
+			studentid=request.POST["studentid"]
+			# print("kajskas",studentid)
+			result = UpdatedProject.objects.filter(project=project, StudentID__StudentID=studentid).update(allocated=1)
+			# print("jkdfd",result)
+		elif status=='2':
+			studentid=request.POST["studentid"]
+			UpdatedProject.objects.filter(StudentID__StudentID = studentid, project = project).delete()
+
+		list_of_students_applied = UpdatedProject.objects.filter(project=project)
+		los_allocated = UpdatedProject.objects.filter(project=project,allocated=1,accept=0)
+		los_selected = UpdatedProject.objects.filter(project=project,allocated=1,accept=1)
+		los_applied = set(list_of_students_applied).difference(set(los_allocated)).difference(set(los_selected))
 		# print(model_to_dict(project))
-		return render(request, 'polls/instructor_project_detail.html',{'project':project})
+		return render(request, 'polls/instructor_project_detail.html',{'project':project,'applied':los_applied,'allocated':los_allocated,'selected':los_selected})
 	else:
 		return redirect('polls:instructor_home')
 
@@ -335,20 +383,19 @@ def instructor_project_change(request):
 	if request.method == "POST":
 		project_id = request.POST["projectid"]
 		instructor_id = request.POST["instructorid"]
-		# instructor1 = Instructors.objects.get(InstructorID=instructor_id)
+		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
 		title = request.POST["title"]
+		tag=request.POST["tags"]
 		description = request.POST["description"]
 		CPIcutoff = request.POST["CPIcutoff"]
 		max_no_of_students = request.POST["max_no_of_students"]
-# <<<<<<< HEAD
 		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
 		project.InstructorID=instructor1
 		project.description=description
-# =======
-		AllProjects.objects.filter(ProjectID=project_id, InstructorID__InstructorID=instructor_id).update(description = description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students)
+		project.tag=tag
+		AllProjects.objects.filter(ProjectID=project_id, InstructorID__InstructorID=instructor_id).update(description = description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students,tag=tag)
 		# project.InstructorID=instructor1
 		# project.description='testing'
-# >>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d
 		#project.title=title
 		# project.CPIcutoff=CPIcutoff
 		# project.max_no_of_students=max_no_of_students

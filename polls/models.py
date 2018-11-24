@@ -33,7 +33,7 @@ class AllProjects(models.Model):
 	CPIcutoff = models.CharField(max_length=5)
 	max_no_of_students = models.IntegerField(default=0)
 	project_status = models.IntegerField(default=1)
-	tag = models.CharField(max_length=50)
+	tag = models.CharField(max_length=50,default='')
 
 class UpdatedProject(models.Model):
 	StudentID = models.ForeignKey(Students,on_delete=models.CASCADE)
