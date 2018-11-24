@@ -33,6 +33,7 @@ class AllProjects(models.Model):
 	CPIcutoff = models.CharField(max_length=5)
 	max_no_of_students = models.IntegerField(default=0)
 	project_status = models.IntegerField(default=1)
+	tag = models.CharField(max_length=50)
 
 class UpdatedProject(models.Model):
 	StudentID = models.ForeignKey(Students,on_delete=models.CASCADE)
@@ -54,7 +55,6 @@ class Chats(models.Model):
 
 class Message(models.Model):
 	MessageID = models.ForeignKey(Chats,on_delete=models.CASCADE)
-	SenderID = models.CharField(max_length=20)
-	ReceiverID = models.CharField(max_length=20)
+	SenderID = models.CharField(max_length=10)
 	message = models.CharField(max_length=200)
 	timestamp = models.DateTimeField(default=timezone.now)

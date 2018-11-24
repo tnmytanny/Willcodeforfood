@@ -69,6 +69,13 @@ def student_home(request):
 			project2.append(temp_proj)
 		print(project2)
 		project_list = set(project_list).difference(set(project2))
+		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1,accept=0)
+		# applied_projects = model_to_dict(applied_projects)
+		project2=[]
+		for i in applied_projects:
+			print('kskajsaks',i)
+			temp_proj = AllProjects.objects.get(pk=i)
+			project2.append(temp_proj)
 		# resume_list = Resume.objects.filter(user = user).order_by("-timestamp")
 		# if request.session.get('resume_id') != None:
 		# 	del request.session['resume_id']
@@ -158,6 +165,7 @@ def student_create_chat(request):
 		student = Students.objects.get(StudentID=student_id)
 		instructor = Instructors.objects.get(InstructorID=instructor_id)
 		chat = Chats(StudentID=student,InstructorID=instructor)
+		print("hey",chat)
 		chat.save()
 	return redirect('polls:student_home')
 
@@ -181,11 +189,31 @@ def chat_detail(request):
 			
 			chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
 			message = Message.objects.filter(MessageID=chat)
-			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id})
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id})
 		elif request.session.get('inst') != None:
 			return redirect('polls:instructor_home')
 	else:
 		return redirect('polls:login')
+
+def send_message(request):
+	if request.method == "POST":
+		message = request.POST["message"]
+		student_id = request.POST["studentid"]
+		instructor_id = request.POST["instructorid"]
+		sender = request.POST["sender"]
+		print(sender)
+		print(student_id)
+		print(instructor_id)
+		Message_ID = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+		chat = Message(MessageID=Message_ID,SenderID=sender,message=message,timestamp=timezone.now())
+		print(Message_ID)
+		chat.save()
+		mychat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+		message = Message.objects.filter(MessageID=mychat)
+		return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id})
+	else :
+		return redirect('polls:login')
+
 # def student_inst_chat(request):
 # 	if request.method == "POST":
 # 		student_id = request.session['stud']
@@ -347,11 +375,18 @@ def instructor_project_create(request):
 		project_id = AllProjects.objects.values_list('ProjectID','InstructorID').filter(InstructorID__InstructorID=instructor_id).aggregate(Max('ProjectID'))
 		# print(project_id)
 		title = request.POST["title"]
+		tag = request.POST["tags"]
 		description = request.POST["description"]
 		CPIcutoff = request.POST["CPIcutoff"]
 		max_no_of_students = request.POST["max_no_of_students"]
-		projectid = project_id['ProjectID__max'] + 1
-		project = AllProjects(InstructorID=instructor1,ProjectID=projectid, title=title,description=description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students)
+		projectid = project_id['ProjectID__max']
+		print(project_id["ProjectID__max"])
+		if projectid==None:
+			projectid = 1
+		else:
+			projectid = projectid + 1
+		print(projectid)
+		project = AllProjects(InstructorID=instructor1,ProjectID=projectid, title=title,description=description,CPIcutoff=CPIcutoff,max_no_of_students=max_no_of_students,tag=tag)
 		project.save()
 
 	return redirect('polls:instructor_home')

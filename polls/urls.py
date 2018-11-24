@@ -22,7 +22,7 @@ urlpatterns = [
     path('student_create_chat/', views.student_create_chat, name='student_create_chat'),
     path('student_show_messages/', views.student_show_messages, name='student_show_messages'),
     path('chat_detail/', views.chat_detail, name='chat_detail'),
-
+    path('send_message/', views.send_message, name='send_message'),
     path('instructor_home/', views.instructor_home, name='instructor_home'),
     path('instructor_project_detail/', views.instructor_project_detail, name='instructor_project_detail'),
     path('instructor_new_project/', views.instructor_new_project, name='instructor_new_project'),

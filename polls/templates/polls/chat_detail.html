@@ -77,3 +77,13 @@
       <input id="password" type="text" name="password"> -->
       <input type="submit" value="logout">
 </form>
+
+<form action={% url 'polls:send_message' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <input type="hidden" name="instructorid" value={{instructorid}}>
+      <input type="hidden" name="studentid" value={{studentid}}>
+      <input id="message" type="text" name="message">
+      <input id="sender" type="hidden" name="sender" value={{loginid}}>
+      <input type="submit" value="Send">
+</form>
