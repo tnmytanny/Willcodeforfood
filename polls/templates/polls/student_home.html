@@ -285,5 +285,15 @@ table tr:nth-child(2n+1) {
 </form>
 
 
+<form action={% url 'polls:list' %} method="post">
+  {% csrf_token %}
+    {{ form }}
+    
+    <input type="submit" value="upload Resume">
+</form>
+
+
+
+
 
 </html>
