@@ -177,7 +177,8 @@
     <th>Title</th>
     <th>Project Title</th>
     <th>Details</th>
-    <th>Delete_project</th>
+    <th>Delete Project</th>
+    <th>Close Project</th>
   </tr>
   {% for projects in project_list %}
     <tr>
@@ -203,6 +204,13 @@
           <input type="submit" value="Delete">
         </form>
       </td>
+      <td>
+        <form action={% url 'polls:instructor_project_close' %} method="post">{% csrf_token %}{{ form }}
+          <input type="hidden" name="projectid" value={{projects.ProjectID}}>
+          <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="submit" value="Close">
+        </form>
+      </td>
     </tr>
   {% endfor %}
 
@@ -225,18 +233,30 @@
       <input type="submit" value="logout">
 </form>
 
-
-<!-- <<<<<<< HEAD -->
-<form action={% url 'polls:instructor_home' %} method="post">
-<!-- ======= -->
 <form action={% url 'polls:instructor_allocated_projects' %} method="post">
-<!-- >>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d -->
     {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Home">
+      <input type="submit" value="Closed Projects">
 </form>
-
+<p><b>To change password</b>
+<form action={% url 'polls:change_password' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <label for="oldpass">Enter Old Password: </label>
+      <input id="oldpass" type="text" name="oldpass">
+      <label for="newpass">Enter New Password: </label>
+      <input id="newpass" type="text" name="newpass">
+      <label for="newpassagain">Enter New Password again: </label>
+      <input id="newpassagain" type="text" name="newpassagain">
+      <input type="submit" value="Change Password">
+</form>
+{% if change_pass == 1 %}
+password changed succesfully
+{% elif change_pass == 2 %}
+Password entered is incorrect
+{% endif %}
+</p>
 </html>

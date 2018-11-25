@@ -173,6 +173,7 @@
 <p><b>Maximum Students Eligible</b>: {{project.max_no_of_students}}</p>
 <h4>Description:</h4>
 <p>{{project.description}}</p>
+{% if show_applied %}
 <p><b>Students Applied for the project</b>:
  <div class="table-users">
     <div class="header">Students Applied</div>
@@ -226,6 +227,7 @@
 </table>
 </div>
 </p>
+{% endif %}
 <p><b>Selected Students</b>:
   <div class="table-users">
     <div class="header">Students Selected</div>

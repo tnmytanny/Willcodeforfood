@@ -28,17 +28,14 @@ urlpatterns = [
     path('instructor_project_detail/', views.instructor_project_detail, name='instructor_project_detail'),
     path('instructor_new_project/', views.instructor_new_project, name='instructor_new_project'),
     path('instructor_project_create/', views.instructor_project_create, name='instructor_project_create'),
-    path('instructor_project_change/', views.instructor_project_change, name='instructor_project_change'),    
-# <<<<<<< HEAD
+    path('instructor_project_change/', views.instructor_project_change, name='instructor_project_change'),
+    path('change_password/', views.change_password, name='change_password'),
     path('instructor_project_edit/', views.instructor_project_edit, name='instructor_project_edit'),  
     path('instructor_project_delete/', views.instructor_project_delete, name='instructor_project_delete'),
-    # path('instructor_project_remove/', views.instructor_project_remove, name='instructor_project_remove'),    
-# =======
+    path('instructor_project_close/', views.instructor_project_close, name='instructor_project_close'),
     path('instructor_project_edit/', views.instructor_project_edit, name='instructor_project_edit'),
-    path('instructor_allocated_projects/', views.instructor_allocated_projects, name='instructor_allocated_projects'),  
-# >>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d
+    path('instructor_allocated_projects/', views.instructor_allocated_projects, name='instructor_allocated_projects'),
     path('logout/', views.logout, name='logout'),
     path('results/', views.results, name='results'),
-    # ex: /polls/5/vote/
     path('<int:question_id>/vote/', views.vote, name='vote'),
 ]

@@ -284,6 +284,23 @@ table tr:nth-child(2n+1) {
       <input type="submit" value="Create Chat">
 </form>
 
-
+<p><b>To change password</b>
+<form action={% url 'polls:change_password' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <label for="oldpass">Enter Old Password: </label>
+      <input id="oldpass" type="text" name="oldpass">
+      <label for="newpass">Enter New Password: </label>
+      <input id="newpass" type="text" name="newpass">
+      <label for="newpassagain">Enter New Password again: </label>
+      <input id="newpassagain" type="text" name="newpassagain">
+      <input type="submit" value="Change Password">
+</form>
+{% if change_pass == 1 %}
+password changed succesfully
+{% elif change_pass == 2 %}
+Password entered is incorrect
+{% endif %}
+</p>
 
 </html>
