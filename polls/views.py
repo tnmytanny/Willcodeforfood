@@ -12,6 +12,10 @@ from .models import AllProjects
 from .models import UpdatedProject
 from .models import Message
 from .models import Chats
+from django.template import RequestContext
+from django.urls import reverse
+from .models import Document
+from .forms import DocumentForm
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -84,6 +88,26 @@ def student_home(request):
 		return render(request, 'polls/student_home.html', {'project_list':project_list,'project2':project2,'change_pass':0})
 	else:
 		return redirect('polls:login')
+
+
+def list(request):
+	if request.method == 'POST':
+		form = DocumentForm(request.POST, request.FILES)
+		print("ajsas")
+		print(form)
+		student_id=request.session['stud']
+		if form.is_valid():
+			newdoc = Document(docfile = request.FILES['docfile'],StudentID=student_id)
+			newdoc.save()
+			print(newdoc)
+			return HttpResponseRedirect(reverse('polls:list'))
+		documents = Document.objects.filter(StudentID=student_id)
+		print(documents)
+		return render(request, 'polls/list.html', {'documents': documents, 'form': form})
+	else:
+		return redirect('polls:student_home')
+
+
 
 def student_project_detail(request):
 	if request.method == "POST":

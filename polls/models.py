@@ -3,6 +3,8 @@ import datetime
 from django.db import models
 from django.utils import timezone
 
+
+
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
@@ -19,6 +21,10 @@ class Students(models.Model):
 	# ResumeLink = models.LinkColumn('item_edit', text='Edit', args=[A('pk')], orderable=False, empty_values=())
 	Interests = models.CharField(max_length=40,default='')
 	Branch = models.CharField(max_length=20,default='')
+
+class Document(models.Model):
+	docfile = models.FileField(upload_to='documents/%Y/%m/%d')
+	StudentID = models.CharField(max_length=10,default='')
 
 class Instructors(models.Model):
 	InstructorID = models.CharField(max_length=10)
