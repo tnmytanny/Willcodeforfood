@@ -90,24 +90,6 @@ def student_home(request):
 		return redirect('polls:login')
 
 
-def list(request):
-	if request.method == 'POST':
-		form = DocumentForm(request.POST, request.FILES)
-		print("ajsas")
-		print(form)
-		student_id=request.session['stud']
-		if form.is_valid():
-			newdoc = Document(docfile = request.FILES['docfile'],StudentID=student_id)
-			newdoc.save()
-			print(newdoc)
-			return HttpResponseRedirect(reverse('polls:list'))
-		documents = Document.objects.filter(StudentID=student_id)
-		print(documents)
-		return render(request, 'polls/list.html', {'documents': documents, 'form': form})
-	else:
-		return redirect('polls:student_home')
-
-
 
 def student_project_detail(request):
 	if request.method == "POST":
@@ -529,6 +511,46 @@ def instructor_allocated_projects(request):
 		return render(request, 'polls/instructor_allocated_projects.html', {'Allocated_projects_accepted':Allocated_projects_accepted})
 	else:
 		return redirect('polls:login')
+
+def student_profile(request):
+	if request.method == 'POST':
+		student_id = request.POST["studentid"]
+		documents = Document.objects.filter(StudentID=student_id)
+		student = Students.objects.get(StudentID=student_id)
+		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'edit':0})
+	else:
+		return redirect('polls:instructor_home')
+
+def student_edit_profile(request):
+	if request.method == 'POST':
+		student_id = request.session['stud']
+		documents = Document.objects.filter(StudentID=student_id)
+		student = Students.objects.get(StudentID=student_id)
+		form = DocumentForm(request.POST, request.FILES)
+		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'form':form,'status':0,'edit':1})
+	else:
+		return redirect('polls:student_home')
+
+def list(request):
+	if request.method == 'POST':
+		form = DocumentForm(request.POST, request.FILES)
+		print("ajsas")
+		print(form)
+		student_id=request.session['stud']
+		status=0
+		student = Students.objects.get(StudentID=student_id)
+		if form.is_valid():
+			Document.objects.filter(StudentID=student_id).delete()
+			newdoc = Document(docfile = request.FILES['docfile'],StudentID=student_id)
+			newdoc.save()
+			print(newdoc)
+			status = 1
+		documents = Document.objects.filter(StudentID=student_id)
+		print(documents)
+		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'form':form,'status':status,'edit':1})
+	else:
+		return redirect('polls:student_home')
+	
 
 # def instructor_add_project(request):
 # 	if request.method == "POST":

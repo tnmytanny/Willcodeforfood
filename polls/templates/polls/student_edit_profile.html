@@ -1,0 +1,29 @@
+<p><b>Name</b>: {{student.Name}}</p>
+<p><b>CPI</b>: {{student.CPI}}</p>
+<p><b>Interests</b>: {{student.Interests}}</p>
+<p><b>Branch</b>: {{student.Branch}}</p>
+<p><b>Resume</b>:
+{% if documents %}
+<ul>
+    {% for document in documents %}
+        <li><a href="{{ document.docfile.url }}">Resume</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+    No documents.
+{% endif %}
+</p>
+<!-- Upload form. Note enctype attribute! -->
+{% if edit %}
+<form action={% url "polls:list" %} method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>{{ form.docfile }}</p>
+    <p><input type="submit" value="Upload"/></p>
+</form>
+{% if status %}
+<p>Resume Uploaded succesfully</p>
+{% endif %}
+{% endif %}
+<form action={% url 'polls:login' %} method="post">{% csrf_token %}{{ form }}
+    <input type="submit" value="Home">
+</form>
