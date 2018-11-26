@@ -1,12 +1,32 @@
 <html>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
 <style>
+  /* @import url(http://fonts.googleapis.com/css?family=Lato:400,700); */
+
 body {
   background-color: #0c404d;
 }
 body * {
   box-sizing: border-box;
 }
-
+span.tags 
+{
+    background: #1abc9c;
+    border-radius: 2px;
+    color: #f5f5f5;
+    font-weight: bold;
+    padding: 2px 4px;
+    }
 .header {
   background-color: #327a81;
   color: white;
@@ -30,6 +50,7 @@ img {
   margin: 1em auto;
   overflow: hidden;
   width: 800px;
+  position: relative;
 }
 
 div.myclass {
@@ -50,6 +71,7 @@ p.show {
 }
 
 table {
+  position: relative;
   width: 100%;
 }
 table td, table th {
@@ -181,10 +203,44 @@ table tr:nth-child(2n+1) {
     overflow: visible;
   }
 }
+.logoutLblPos{
+
+position:fixed;
+right:10px;
+top:5px;
+}
+.msgpos{
+
+position:fixed;
+right:230px;
+top:5px;
+}
+.viewprof{
+
+position:fixed;
+right:100px;
+top:5px;
+}
+.button2 {background-color: #daeff1;}
+.btn {
+height: 40px;
+}
 
 
 
 </style>
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <label class="logoutLblPos">
+      <button class="btn btn-default btn-sm button2">
+          <span class="glyphicon glyphicon-log-out"></span> Log out
+      </button>
+      </label>
+</form>
 
 <form action={% url 'polls:student_filter_project' %} method="post">
     {% csrf_token %}
@@ -195,10 +251,8 @@ table tr:nth-child(2n+1) {
       <input type="submit" value="Filter">
 </form>
 
-
-<div class="table-users">
-    <div class="header">Users</div>
- 
+<div style="float: middle" class="table-users">
+    <div class="header">Projects</div>
   <table cellspacing="0">
   <tr>
     <th>Instructor</th>
@@ -228,7 +282,6 @@ table tr:nth-child(2n+1) {
       <td>
         <form action={% url 'polls:chat_detail' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
-          <input type="hidden" name="instructorname" value={{projects.InstructorID.Name}}>
           <input type="hidden" name="loginid" value='S'>
           <input type="submit" value="Chat">
         </form>
@@ -256,7 +309,6 @@ table tr:nth-child(2n+1) {
       <td>
         <form action={% url 'polls:chat_detail' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
-          <input type="hidden" name="instructorname" value={{projects.InstructorID.Name}}>
           <input type="hidden" name="loginid" value='S'>
           <input type="submit" value="Chat">
         </form>
@@ -266,14 +318,7 @@ table tr:nth-child(2n+1) {
 </table>
 </div>
 
-<form action={% url 'polls:logout' %} method="post">
-    {% csrf_token %}
-      {{ form }}
-      <!-- <label for="UserID">UserID: </label>
-      <input id="UserID" type="text" name="userid">
-      <input id="password" type="text" name="password"> -->
-      <input type="submit" value="logout">
-</form>
+
 
 <form action={% url 'polls:student_allocated_projects' %} method="post">
     {% csrf_token %}
@@ -290,7 +335,13 @@ table tr:nth-child(2n+1) {
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Messages">
+      <label class="msgpos">
+      <!-- <input type="submit" value="Messages"> -->
+      <button class="btn btn-default btn-sm button2">
+          <span class="glyphicon glyphicon-envelope"></span> Messages
+      </button>
+
+    </label>
 </form>
 
 
@@ -326,7 +377,11 @@ Password entered is incorrect
   {% csrf_token %}
     {{ form }}
     
-    <input type="submit" value="Edit Profile">
+    <!-- <input type="submit" value="View Profile"> -->
+    <!-- <button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile </button> -->
+    <label class="viewprof">
+    <button class="btn btn-default btn-sm button2">View Profile<i class="w3-margin-left fa fa-user"></i></button>
+</label>
 </form>
 
 <script>

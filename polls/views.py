@@ -200,29 +200,58 @@ def student_create_chat(request):
 		student_id = request.session['stud']
 		#project_id = request.POST["projectid"]
 		instructor_id = request.POST["instructorid"]
+		# inst_name = request.POST["instructorid"]
 		student = Students.objects.get(StudentID=student_id)
-		instructor = Instructors.objects.get(InstructorID=instructor_id)
-		already_chat = Chats.objects.filter(StudentID=student,InstructorID=instructor)
-		print(already_chat)
-		if not already_chat:
-			chat = Chats(StudentID=student,InstructorID=instructor)
-			print("hey",chat)
-			chat.save()
+		instructor = Instructors.objects.filter(InstructorID=instructor_id)
+		instructor2 = Instructors.objects.filter(Name=instructor_id)
+		# already_chat = []
+		if instructor:
+			instructor = Instructors.objects.get(InstructorID=instructor_id)
+			already_chat = Chats.objects.filter(StudentID=student,InstructorID=instructor)
+			if not already_chat:
+				chat = Chats(StudentID=student,InstructorID=instructor)
+				print("hey",chat)
+				chat.save()
+		elif instructor2:
+			instructor2 = Instructors.objects.get(Name=instructor_id)
+			if not already_chat:
+				chat = Chats(StudentID=student,InstructorID=instructor2)
+				print("hey",chat)
+				chat.save()
+			already_chat2 = Chats.objects.filter(StudentID=student,InstructorID=instructor)
+		# print(already_chat)
+		# already_chat2 = Chats.objects.filter(StudentID=student,InstructorID=instructor2)
+		# print(already_chat)
 	return redirect('polls:student_home')
 
 def instructor_create_chat(request):
 	if request.method == "POST":
 		instructor_id = request.session['inst']
 		#project_id = request.POST["projectid"]
-		student_id = request.POST["stud"]
-		student = Students.objects.get(StudentID=student_id)
+		student_id = request.POST["studentid"]
+		# stud_name = request.POST["studentid"]
 		instructor = Instructors.objects.get(InstructorID=instructor_id)
-		already_chat = Chats.objects.filter(StudentID=student,InstructorID=instructor)
-		print(already_chat)
-		if not already_chat:
-			chat = Chats(StudentID=student,InstructorID=instructor)
-			print("hey",chat)
-			chat.save()
+		student = Students.objects.filter(StudentID=student_id)
+		student2 = Students.objects.filter(Name=student_id)
+		already_chat = []
+		if student:
+			student = Students.objects.get(StudentID=student_id)
+			already_chat = Chats.objects.filter(StudentID=student,InstructorID=instructor)
+			if not already_chat:
+				chat = Chats(StudentID=student,InstructorID=instructor)
+				print("hey",chat)
+				chat.save()
+		elif student2:
+			student2 = Students.objects.get(Name=student_id)
+			already_chat2 = Chats.objects.filter(StudentID=student2,InstructorID=instructor)
+			if not already_chat2:
+				chat = Chats(StudentID=student2,InstructorID=instructor)
+				print("hey",chat)
+				chat.save()
+		# print(already_chat)
+		
+		# already_chat2 = Chats.objects.filter(StudentID=student2,InstructorID=instructor)
+		# print(already_chat)
 	return redirect('polls:instructor_home')
 
 def student_show_messages(request):
@@ -275,9 +304,56 @@ def chat_detail(request):
 			allchats = Chats.objects.filter(InstructorID__InstructorID = instructor_id)
 			chat = [chat]
 			allchats = set(allchats).difference(set(chat))
+			print(student_id)
 			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'stud_name':stud_name,'allchats':allchats})
 	else:
 		return redirect('polls:login')
+
+def search_chat(request):
+	if request.method == "POST":
+		if request.session.get('stud') != None:
+			student_id = request.session["stud"]
+			instructor_id = request.POST["instructorid"]
+			login_id = request.POST["loginid"]
+			inst_name = request.POST["inst_name"]
+			# message = request.POST["message"]
+			# print("kajsaksjaks",message)
+			noofmsg = request.POST["noofmsg"]
+			print(instructor_id)
+			print(student_id)
+			print(login_id)
+			search_name = request.POST["search_name"]
+			chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			message = Message.objects.filter(MessageID=chat)
+			allchats = Chats.objects.filter(StudentID__StudentID = student_id,InstructorID__Name__contains=search_name)
+			chat = [chat]
+			allchats = set(allchats).difference(set(chat))
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmsg,'inst_name':inst_name,'allchats':allchats})
+		elif request.session.get('inst') != None:
+			instructor_id = request.session["inst"]
+			student_id = request.POST["studentid"]
+			login_id = request.POST["loginid"]
+			stud_name = request.POST["stud_name"]
+			# message = request.POST["message"]
+			noofmsg = request.POST["noofmsg"]
+
+			# print("kajsaksjaks",message)
+			print(instructor_id)
+			print(student_id)
+			print(login_id)
+			print(stud_name)
+			search_name = request.POST["search_name"]
+			chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			print(chat)
+			message = Message.objects.filter(MessageID=chat)
+			print(message)
+			allchats = Chats.objects.filter(InstructorID__InstructorID = instructor_id,StudentID__Name__contains=search_name)
+			chat = [chat]
+			allchats = set(allchats).difference(set(chat))
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmsg,'stud_name':stud_name,'allchats':allchats})
+	else:
+		return redirect('polls:login')
+
 
 def send_message(request):
 	if request.method == "POST":

@@ -244,9 +244,23 @@
 				<div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
 					<div class="card-header">
 						<div class="input-group">
-							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<input type="text" placeholder="Search..." name="search_name" form="search_form" class="form-control search">
 							<div class="input-group-prepend">
-								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+								<form action= {% url 'polls:search_chat' %} method="post" id="search_form">
+								{% csrf_token %}
+						      	{{ form }}
+								<input id="loginid" type="hidden" name="loginid" value={{loginid}}>
+								<input id="instructorid" type="hidden" name="instructorid" value={{instructorid}}>
+								<input id="studentid" type="hidden" name="studentid" value={{studentid}}>
+								<input id="noofmsg" type="hidden" name="noofmsg" value={{noofmessages}}>
+								{% if loginid == 'I' %}
+								<input id="stud_name" type="hidden" name="stud_name" value={{stud_name}}>
+								{% elif loginid == 'S' %}
+								<input id="inst_name" type="hidden" name="inst_name" value={{inst_name}}>
+								{% endif %}
+								<button class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+								</button>
+							</form>
 							</div>
 						</div>
 					</div>
