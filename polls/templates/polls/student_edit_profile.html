@@ -25,5 +25,5 @@
 {% endif %}
 {% endif %}
 <form action={% url 'polls:login' %} method="post">{% csrf_token %}{{ form }}
-    <input type="submit" value="Home">
+    <p><input type="submit" value="Home"></p>
 </form>
