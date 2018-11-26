@@ -219,6 +219,12 @@
 		padding: 0;
 	margin: 0;
 	}
+	.home{
+
+position:fixed;
+right:20px;
+top:5px;
+}
 	.action_menu ul li{
 		width: 100%;
 		padding: 10px 15px;
@@ -239,6 +245,20 @@
 	}
 </style>
 	<body>
+			<form action={% url 'polls:login' %} method="post">
+					{% csrf_token %}
+					  {{ form }}
+					  <!-- <label for="UserID">UserID: </label>
+					  <input id="UserID" type="text" name="userid">
+					  <input id="password" type="text" name="password"> -->
+					  <!-- <input type="submit" value="Home"> -->
+					  <label class="home">
+				
+					  <button class="btn btn-default btn-sm button2"><i class="w3-margin-middle fa fa-home"></i></button>
+					  </label>
+				</form>
+
+
 		<div class="container-fluid h-100">
 			<div class="row justify-content-center h-100">
 				<div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
