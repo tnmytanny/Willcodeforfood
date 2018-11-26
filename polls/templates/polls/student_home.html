@@ -32,6 +32,23 @@ img {
   width: 800px;
 }
 
+div.myclass {
+  color: black;
+  display: none;
+}
+p.show {
+  /*background-color: #eee;*/
+  color: black;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.1s;
+}
+
 table {
   width: 100%;
 }
@@ -283,9 +300,9 @@ table tr:nth-child(2n+1) {
       <!-- <input id="password" type="text" name="password"> -->
       <input type="submit" value="Create Chat">
 </form>
-
-<p><b>To change password</b>
-<form action={% url 'polls:change_password' %} method="post">
+<p class="show" onclick="myFunction()"><b>Click to change password</b></p>
+<div id="mydiv" class="myclass">
+  <form action={% url 'polls:change_password' %} method="post">
     {% csrf_token %}
       {{ form }}
       <label for="oldpass">Enter Old Password: </label>
@@ -302,16 +319,22 @@ password changed succesfully
 Password entered is incorrect
 {% endif %}
 </p>
-
-<form action={% url 'polls:list' %} method="post">
+</div>
+<form action={% url 'polls:student_edit_profile' %} method="post">
   {% csrf_token %}
     {{ form }}
     
     <input type="submit" value="View Profile">
 </form>
 
-
-
-
-
+<script>
+  function myFunction() {
+    var x = document.getElementById("mydiv");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
 </html>
