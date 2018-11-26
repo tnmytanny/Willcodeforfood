@@ -14,7 +14,7 @@
   /* @import url(http://fonts.googleapis.com/css?family=Lato:400,700); */
 
 body {
-  background-color: #0c404d;
+  background-color: #436145;
 }
 body * {
   box-sizing: border-box;
@@ -43,9 +43,7 @@ img {
 }
 
 .table-users {
-  border: 1px solid #327a81;
   border-radius: 10px;
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
   max-width: calc(100% - 2em);
   margin: 1em auto;
   overflow: hidden;
@@ -91,12 +89,13 @@ table tr:hover {background-color: #D5D8DC !important;}
 table th {
   background-color: #daeff1;
   font-weight: 300;
+  text-align: center;
 }
 table tr:nth-child(2n) {
   background-color: white;
 }
 table tr:nth-child(2n+1) {
-  background-color: #edf7f8;
+  background-color: #E4FFF2;
 }
 
 @media screen and (max-width: 700px) {
@@ -242,15 +241,6 @@ height: 40px;
       </label>
 </form>
 
-<form action={% url 'polls:logout' %} method="post">
-    {% csrf_token %}
-      {{ form }}
-      <!-- <label for="UserID">UserID: </label>
-      <input id="UserID" type="text" name="userid">
-      <input id="password" type="text" name="password"> -->
-      <input type="submit" value="logout" style="float: right;">
-</form>
-
 <form action={% url 'polls:student_filter_project' %} method="post">
     {% csrf_token %}
       {{ form }}
@@ -260,11 +250,8 @@ height: 40px;
       <input type="submit" value="Filter">
 </form>
 
-<<<<<<< HEAD
 <div style="float: middle" class="table-users">
-=======
 <div class="table-users">
->>>>>>> 7f4738d8f13c82991d4afb2a2407e90f2dac6346
     <div class="header">Projects</div>
   <table cellspacing="0">
   <tr>
@@ -295,6 +282,7 @@ height: 40px;
       <td>
         <form action={% url 'polls:chat_detail' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="hidden" name="instructorname" value={{projects.InstructorID.Name}}>
           <input type="hidden" name="loginid" value='S'>
           <input type="submit" value="Chat">
         </form>
@@ -316,6 +304,7 @@ height: 40px;
         <form action={% url 'polls:student_project_cancel' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="projectid" value={{projects.ProjectID}}>
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="hidden" name="instructorname" value={{projects.InstructorID.Name}}>
           <input type="submit" value="Cancel">
         </form>
       </td>
@@ -371,13 +360,13 @@ height: 40px;
   <form action={% url 'polls:change_password' %} method="post">
     {% csrf_token %}
       {{ form }}
-      <label for="oldpass">Enter Old Password: </label>
-      <input id="oldpass" type="text" name="oldpass">
-      <label for="newpass">Enter New Password: </label>
-      <input id="newpass" type="text" name="newpass">
-      <label for="newpassagain">Enter New Password again: </label>
-      <input id="newpassagain" type="text" name="newpassagain">
-      <input type="submit" value="Change Password">
+      <p><label for="oldpass">Enter Old Password: </label>
+      <input id="oldpass" type="text" name="oldpass"></p>
+      <p><label for="newpass">Enter New Password: </label>
+      <input id="newpass" type="text" name="newpass"></p>
+      <p><label for="newpassagain">Enter New Password again: </label>
+      <input id="newpassagain" type="text" name="newpassagain"></p>
+      <p><input type="submit" value="Change Password"></p>
 </form>
 {% if change_pass == 1 %}
 password changed succesfully
@@ -390,15 +379,11 @@ Password entered is incorrect
   {% csrf_token %}
     {{ form }}
     
-<<<<<<< HEAD
     <!-- <input type="submit" value="View Profile"> -->
     <!-- <button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile </button> -->
     <label class="viewprof">
     <button class="btn btn-default btn-sm button2">View Profile<i class="w3-margin-left fa fa-user"></i></button>
 </label>
-=======
-    <input type="submit" value="View Profile">
->>>>>>> 7f4738d8f13c82991d4afb2a2407e90f2dac6346
 </form>
 
 <script>

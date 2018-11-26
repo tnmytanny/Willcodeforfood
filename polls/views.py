@@ -603,6 +603,7 @@ def instructor_new_project(request):
 		instructor_id = request.POST["instructorid"]
 		#project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
 		# print(model_to_dict(project))
+		print(instructor_id)
 		return render(request, 'polls/instructor_new_project.html',{'instructor_id':instructor_id})
 	else:
 		return redirect('polls:instructor_home')
@@ -610,6 +611,7 @@ def instructor_new_project(request):
 def instructor_project_create(request):
 	if request.method == "POST":
 		instructor_id = request.POST["instructorid"]
+		print("ksajskajska",instructor_id)
 		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
 		project_id = AllProjects.objects.values_list('ProjectID','InstructorID').filter(InstructorID__InstructorID=instructor_id).aggregate(Max('ProjectID'))
 		# print(project_id)

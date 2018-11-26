@@ -1,3 +1,203 @@
+<html>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<style type="text/css">
+body {
+  background-color: #436145;
+}
+.form-style-4{
+  width: 700px;
+  font-size: 16px;
+  background: #495C70;
+  padding: 30px 30px 15px 30px;
+  border: 5px solid #53687E;
+  display: inline-block;
+  float: middle;
+  margin-top: -30px;
+  margin-left: 10px;
+  /*text-align: center;*/
+}
+.form-style-4 input[type=submit],
+.form-style-4 input[type=button],
+.form-style-4 input[type=text],
+.form-style-4 input[type=number],
+.form-style-4 textarea,
+.form-style-4 label
+{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 16px;
+  color: #fff;
+
+}
+.form-style-4 label {
+  display:block;
+  margin-bottom: 10px;
+}
+.form-style-4 label > span{
+  display: inline-block;
+  float: left;
+  width: 150px;
+}
+.form-style-4 input[type=text],
+.form-style-4 input[type=number] 
+{
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed #83A4C5;
+  width: 575px;
+  outline: none;
+  padding: 0px 0px 0px 0px;
+  font-style: italic;
+}
+.form-style-4 textarea{
+  font-style: italic;
+  padding: 0px 0px 0px 0px;
+  background: transparent;
+  outline: none;
+  border: none;
+  border-bottom: 1px dashed #83A4C5;
+  width: 575px;
+  overflow: hidden;
+  resize:none;
+  height:20px;
+}
+
+.form-style-4 textarea:focus, 
+.form-style-4 input[type=text]:focus,
+.form-style-4 input[type=number]:focus,
+.form-style-4 input[type=number] :focus
+{
+  border-bottom: 1px dashed #D9FFA9;
+}
+
+.form-style-4 input[type=submit],
+.form-style-4 input[type=button]{
+  background: #2A88AD;
+  border: none;
+  padding: 8px 10px 8px 10px;
+  border-radius: 5px;
+  color: #A8BACE;
+}
+.form-style-4 input[type=submit]:hover,
+.form-style-4 input[type=button]:hover{
+background: #394D61;
+}
+.form-style-10 h1{
+  background: #2A88AD;
+  padding: 20px 30px 15px 30px;
+  margin: -30px -30px 30px -30px;
+  border-radius: 10px 10px 0 0;
+  -webkit-border-radius: 10px 10px 0 0;
+  -moz-border-radius: 10px 10px 0 0;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+  font: normal 30px 'Bitter', serif;
+  -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+  -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+  box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+  border: 1px solid #257C9E;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 0px;
+  width: 700px;
+}
+.logoutLblPos{
+
+position:fixed;
+right:10px;
+top:5px;
+}
+.home{
+
+position:fixed;
+right:100px;
+top:5px;
+}
+.button2 {background-color: #daeff1;}
+.btn {
+height: 40px;
+}
+div.myclass{
+  color: black;
+}
+
+</style>
+<div class="form-style-10">
+<h1>{{project.title}}</h1>
+</div>
+<form class="form-style-4" action={% url 'polls:instructor_project_change' %} id=myform method="post">{% csrf_token %}{{ form }}
+<input type="hidden" name="projectid" value={{project.ProjectID}}>
+<input type="hidden" name="title" value={{project.title}}>
+<input type="hidden" name="instructorid" value={{project.InstructorID.InstructorID}}>
+<label for="field2">
+<span>CPI cutoff</span><input type="number" name="CPIcutoff" step="0.1" required="true" value={{project.CPIcutoff}}/>
+</label>
+<label for="field3">
+<span>Maximum Students</span><input type="number" name="max_no_of_students" value={{project.max_no_of_students}}/>
+</label>
+<label for="field4">
+<span>Tag</span>
+<div class="myclass">
+<select name="tags">
+    <option value="">---</option>
+    <option value="Machine Learning">Machine Learning</option>
+    <option value="Database">Database</option>
+    <option value="Image Processing">Image Processing</option>
+    <option value="Web Development">Web Development</option>
+  </select>
+</div>
+</label>
+<label for="field5">
+  <span>Description</span>
+  <textarea name="description" onkeyup="adjust_textarea(this)" value={{project.description}}></textarea>
+</label>
+<label>
+<span> </span><input type="submit" value="Save" />
+</label>
+</form>
+
+<form action={% url 'polls:student_home' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <!-- <input type="submit" value="Home"> -->
+      <label class="home">
+
+      <button class="btn btn-default btn-sm button2"><i class="w3-margin-middle fa fa-home"></i></button>
+      </label>
+</form>
+<form action={% url 'polls:logout' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <label class="logoutLblPos">
+      <button class="btn btn-default btn-sm button2">
+          <span class="glyphicon glyphicon-log-out"></span> Log out
+      </button>
+      </label>
+</form>
+
+<script type="text/javascript">
+//auto expand textarea
+function adjust_textarea(h) {
+    h.style.height = "20px";
+    h.style.height = (h.scrollHeight)+"px";
+}
+</script>
+</html>
+
+
+
+
+
+
+<!-- 
 <h1 align="center">{{project.title}}</h1>
 <p>
 	<form action={% url 'polls:instructor_project_change' %} method="post">{% csrf_token %}{{ form }}
@@ -17,17 +217,4 @@
         <input type="text" name="description" value={{project.description}}>
     <p><input type="submit" value="Save"></p>
     </form>
-</p>
-<p>
-	<form action={% url 'polls:instructor_home' %} method="post">{% csrf_token %}{{ form }}
-        <input type="submit" value="Home">
-    </form>
-</p>
-<form action={% url 'polls:logout' %} method="post">
-    {% csrf_token %}
-      {{ form }}
-      <!-- <label for="UserID">UserID: </label>
-      <input id="UserID" type="text" name="userid">
-      <input id="password" type="text" name="password"> -->
-      <input type="submit" value="logout">
-</form>
+</p> -->

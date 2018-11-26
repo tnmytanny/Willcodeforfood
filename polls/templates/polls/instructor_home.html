@@ -195,17 +195,21 @@
         .btn {
           height: 40px;
         }
-        
+        .msgpos{
+          position:fixed;
+          right:130px;
+          top:5px;
+        }
         </style>
 <div style="width:400px;">
     <div style="float: left; width: 130px"> 
-        <form action={% url 'polls:instructor_new_project' %} method="post">
-    {% csrf_token %}
+      <form action={% url 'polls:instructor_new_project' %} method="post">
+      {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label> -->
-      <input name="instructorid" type="hidden" value={{instructor_id}}>
-      <button class="btn btn-default btn-sm button2">Add project<i class="w3-margin-left fa fa-plus"></i></button>
-</form>
+        <input name="instructorid" type="hidden" value={{instructor_id}}>
+        <button class="btn btn-default btn-sm button2">Add project<i class="w3-margin-left fa fa-plus"></i></button>
+      </form>
     </div>
     <div style="float: right; width: 225px"> 
         <form action={% url 'polls:login' %} method="post">
@@ -292,9 +296,14 @@
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Messages">
-</form>
+      <label class="msgpos">
+      <!-- <input type="submit" value="Messages"> -->
+      <button class="btn btn-default btn-sm button2">
+          <span class="glyphicon glyphicon-envelope"></span> Messages
+      </button>
 
+    </label>
+</form>
 <form action={% url 'polls:instructor_create_chat' %} method="post">
     {% csrf_token %}
       {{ form }}

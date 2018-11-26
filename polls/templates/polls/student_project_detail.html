@@ -1,58 +1,101 @@
 <html>
-    <head>
-
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-    </head>
-<style>
-
-@import url(http://fonts.googleapis.com/css?family=Lato:400,700);
-body > div
-{
-    font-family: 'Lato', 'sans-serif';
-    background-color: #0c404d;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        
+    <style>
+      /* @import url(http://fonts.googleapis.com/css?family=Lato:400,700); */
+    
+    body {
+      background-color: #436145;
+      color: black;
     }
-.profile 
-{
-    min-height: 355px;
-    display: inline-block;
+    body * {
+      box-sizing: border-box;
     }
-.divider 
-{
-    border-top:1px solid rgba(0,0,0,0.1);
+    .imglist ul{
+    margin:0px;
+    list-style-type: none;
+}
+.imglist li{
+    font-size:14px;
+    margin-left:25px;
+    padding:0px;
+    /*list-style-image:url("https://cdn.iconscout.com/icon/free/png-16/angle-double-right-forward-arrow-44392.png");*/
+    line-height:30px;
+}
+.imglist li a:link, .imglist li a:visited{
+    color:#1e598e;
+    text-decoration:none;
+ 
+}
+.imglist li a:hover{
+    color:#0A7CAF;
+    padding:2px;
+    -moz-box-shadow: 0px 0px 12px #9e9ea3;
+    -webkit-box-shadow: 0px 0px 12px #9e9ea3;
+    box-shadow: 0px 0px 12px #9e9ea3;
+    border:none 0px #000000;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+    .logoutLblPos{
+    
+    position:fixed;
+    right:10px;
+    top:5px;
     }
-span.tags 
-{
-    background: #1abc9c;
-    border-radius: 2px;
-    color: #f5f5f5;
-    font-weight: bold;
-    padding: 2px 4px;
+    .home{
+    
+    position:fixed;
+    right:100px;
+    top:5px;
+    }
+    .button2 {background-color: #daeff1;}
+    .btn {
+    height: 40px;
     }
 </style>
 
 <h1 align="center">{{project.title}}</h1>
+<div class="imglist">
+<ul>
+<li><i class="fa fa-chevron-circle-right" style="font-size:12px;"></i>   <b>Instructor</b>: {{project.InstructorID.Name}}</li>
+<li><i class="fa fa-chevron-circle-right" style="font-size:12px;"></i>   <b>CPI cutoff</b>: {{project.CPIcutoff}}</li>
+<li><i class="fa fa-chevron-circle-right" style="font-size:12px;"></i>   <b>Maximum Students Eligible</b>: {{project.max_no_of_students}}</li>
+<li><i class="fa fa-chevron-circle-right" style="font-size:12px;"></i>   <b>Tags</b>: {{project.tag}}</li>
+<li><i class="fa fa-chevron-circle-right" style="font-size:12px;"></i>   <b>Description</b>: <br>{{project.description}}</li>
+</div>
+<!-- 
 <p><b>Instructor</b>: {{project.InstructorID.Name}}</p>
 <p><b>CPI cutoff</b>: {{project.CPIcutoff}}</p>
 <p><b>Maximum Students Eligible</b>: {{project.max_no_of_students}}</p>
 <h4>Description:</h4>
-<p>{{project.description}}</p>
-<p>
-	<form action={% url 'polls:student_home' %} method="post">{% csrf_token %}{{ form }}
-        <input type="submit" value="Home">
-    </form>
-</p>
-<form action={% url 'polls:logout' %} method="post">
-    {% csrf_token %}
-      {{ form }}
-      <!-- <label for="UserID">UserID: </label>
-      <input id="UserID" type="text" name="userid">
-      <input id="password" type="text" name="password"> -->
-      <input type="submit" value="logout">
+<p>{{project.description}}</p> -->
+<form action={% url 'polls:student_home' %} method="post">
+{% csrf_token %}
+{{ form }}
+  <!-- <label for="UserID">UserID: </label>
+  <input id="UserID" type="text" name="userid">
+  <input id="password" type="text" name="password"> -->
+  <!-- <input type="submit" value="Home"> -->
+  <label class="home">
+
+  <button class="btn btn-default btn-sm button2"><i class="w3-margin-middle fa fa-home"></i></button>
+  </label>
 </form>
+<form action={% url 'polls:logout' %} method="post">
+{% csrf_token %}
+{{ form }}
+  <!-- <label for="UserID">UserID: </label>
+  <input id="UserID" type="text" name="userid">
+  <input id="password" type="text" name="password"> -->
+  <label class="logoutLblPos">
+  <button class="btn btn-default btn-sm button2">
+      <span class="glyphicon glyphicon-log-out"></span> Log out
+  </button>
+  </label>
+</form>
+    
+
+</html>
