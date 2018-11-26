@@ -1,6 +1,10 @@
 <html>
+
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 <style type="text/css">
@@ -141,7 +145,7 @@ div.myclass{
 <label for="field4">
 <span>Tag</span>
 <div class="myclass">
-<select name="tags">
+<select data-placeholder="Choose some tags..." multiple class="chosen-select" name="tags" required="true">
     <option value="">---</option>
     <option value="Machine Learning">Machine Learning</option>
     <option value="Database">Database</option>
@@ -190,5 +194,7 @@ function adjust_textarea(h) {
     h.style.height = "20px";
     h.style.height = (h.scrollHeight)+"px";
 }
+
+$(".chosen-select").chosen({no_results_text: "Oops, nothing found!"}); 
 </script>
 </html>

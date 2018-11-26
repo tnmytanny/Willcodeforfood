@@ -5,29 +5,16 @@ from django.http import HttpResponseRedirect
 from django.forms.models import model_to_dict
 from django.utils import timezone
 from django.db.models import Max
-from .models import Question
 from .models import Students
 from .models import Instructors
 from .models import AllProjects
-from .models import UpdatedProject
+from .models import AppliedProject
 from .models import Message
 from .models import Chats
 from django.template import RequestContext
 from django.urls import reverse
 from .models import Document
 from .forms import DocumentForm
-
-def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'polls/index.html', context)
-
-def detail(request, question_id):
-    try:
-        question = Question.objects.get(pk=question_id)
-    except Question.DoesNotExist:
-        raise Http404("Question does not exist")
-    return render(request, 'polls/detail.html', {'question': question})
 
 def login(request):
 
@@ -65,7 +52,10 @@ def student_home(request):
 		# print(student_cpi)
 		
 		project_list = AllProjects.objects.filter(CPIcutoff__lte = student['CPI'], project_status=1)
-		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1)
+		for project in project_list:
+			print(project)
+		print(student['CPI'])
+		applied_projects = AppliedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1)
 		# applied_projects = model_to_dict(applied_projects)
 		project2=[]
 		for i in applied_projects:
@@ -73,7 +63,7 @@ def student_home(request):
 			project2.append(temp_proj)
 		print(project2)
 		project_list = set(project_list).difference(set(project2))
-		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1,accept=0)
+		applied_projects = AppliedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1,allocated=0)
 		# applied_projects = model_to_dict(applied_projects)
 		project2=[]
 		for i in applied_projects:
@@ -108,7 +98,7 @@ def student_project_apply(request):
 		student_id = request.session['stud']
 		student = Students.objects.get(StudentID=student_id)
 		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
-		project2 = UpdatedProject(StudentID=student,project=project,time=timezone.now())
+		project2 = AppliedProject(StudentID=student,project=project,time=timezone.now())
 		project2.save()
 		# request.session["applied"] = 1
 		# print(model_to_dict(project))
@@ -121,7 +111,7 @@ def student_project_cancel(request):
 		student_id = request.session['stud']
 		student = Students.objects.get(StudentID=student_id)
 		project = AllProjects.objects.get(ProjectID=project_id, InstructorID__InstructorID=instructor_id)
-		UpdatedProject.objects.get(StudentID=student,project=project).delete()
+		AppliedProject.objects.get(StudentID=student,project=project).delete()
 		# project2.save()
 		# request.session["applied"] = 1
 		# print(model_to_dict(project))
@@ -131,8 +121,8 @@ def student_allocated_projects(request):
 	if request.session.get('stud') != None:
 		student_id = request.session['stud']
 
-		Allocated_projects_pending = UpdatedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 0)
-		Allocated_projects_accepted = UpdatedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 1)
+		Allocated_projects_pending = AppliedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 0)
+		Allocated_projects_accepted = AppliedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 1)
 		return render(request, 'polls/student_allocated_projects.html', {'Allocated_projects_pending':Allocated_projects_pending, 'Allocated_projects_accepted':Allocated_projects_accepted})
 	else:
 		return redirect('polls:student_home')
@@ -145,7 +135,7 @@ def student_project_accept(request):
 		print(student_id)
 		print(project_id)
 		print(instructor_id)
-		UpdatedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).update(accept = 1)
+		AppliedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).update(accept = 1)
 		# project2.save()
 		# print(project2)
 		return redirect('polls:student_allocated_projects')
@@ -157,7 +147,7 @@ def student_project_reject(request):
 		student_id = request.session['stud']
 		project_id = request.POST["projectid"]
 		instructor_id = request.POST["instructorid"]
-		UpdatedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).delete()
+		AppliedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).delete()
 		return redirect('polls:student_allocated_projects')
 	else:
 		return redirect('polls:student_allocated_projects')
@@ -171,7 +161,7 @@ def student_filter_project(request):
 		# print(student_cpi)
 		
 		project_list = AllProjects.objects.filter(CPIcutoff__lte = student['CPI'], project_status=1,tag__contains=filter_tag)
-		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1)
+		applied_projects = AppliedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1)
 		# applied_projects = model_to_dict(applied_projects)
 		project2=[]
 		for i in applied_projects:
@@ -179,7 +169,7 @@ def student_filter_project(request):
 			project2.append(temp_proj)
 		print(project2)
 		project_list = set(project_list).difference(set(project2))
-		applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1,accept=0,project__tag__contains=filter_tag)
+		applied_projects = AppliedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1,accept=0,project__tag__contains=filter_tag)
 		# applied_projects = model_to_dict(applied_projects)
 		project2=[]
 		for i in applied_projects:
@@ -425,14 +415,14 @@ def change_password(request):
 			student1 = Students.objects.get(StudentID=student_id)
 			student = model_to_dict(student1)
 			project_list = AllProjects.objects.filter(CPIcutoff__lte = student['CPI'], project_status=1)
-			applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1)
+			applied_projects = AppliedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1)
 			project2=[]
 			for i in applied_projects:
 				temp_proj = AllProjects.objects.get(pk=i)
 				project2.append(temp_proj)
 			print(project2)
 			project_list = set(project_list).difference(set(project2))
-			applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1,accept=0)
+			applied_projects = AppliedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=student_id,project__project_status=1,accept=0)
 			# applied_projects = model_to_dict(applied_projects)
 			project2=[]
 			for i in applied_projects:
@@ -453,7 +443,7 @@ def change_password(request):
 # 		#project_id = request.POST["projectid"]
 # 		instructor_id = request.POST["instructorid"]
 # 		messages = Message.objects.filter(StudentID=student_id, InstructorID__InstructorID=instructor_id)
-# 		#UpdatedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).delete()
+# 		#AppliedProject.objects.filter(StudentID__StudentID = student_id, project__ProjectID = project_id, project__InstructorID__InstructorID = instructor_id).delete()
 # 		return render(request,'polls/student_instructor_chat.html',{'messages':messages,'student_id':student_id,'instructor_id':instructor_id})
 # 	else:
 # 		return render(request,'polls/student_instructor_chat.html')
@@ -490,7 +480,7 @@ def instructor_home(request):
 		# print(student_cpi)
 		
 		project_list = AllProjects.objects.filter(InstructorID__InstructorID = instructor['InstructorID'],project_status=1)#, project_status=1)
-		#applied_projects = UpdatedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=instructor_id)
+		#applied_projects = AppliedProject.objects.values_list('project',flat=True).filter(StudentID__StudentID=instructor_id)
 		# applied_projects = model_to_dict(applied_projects)
 		#project2=[]
 		#for i in applied_projects:
@@ -524,16 +514,16 @@ def instructor_project_detail(request):
 		if status=='1':
 			studentid=request.POST["studentid"]
 			# print("kajskas",studentid)
-			result = UpdatedProject.objects.filter(project=project, StudentID__StudentID=studentid).update(allocated=1)
+			result = AppliedProject.objects.filter(project=project, StudentID__StudentID=studentid).update(allocated=1)
 			# print("jkdfd",result)
 		elif status=='2':
 			studentid=request.POST["studentid"]
-			UpdatedProject.objects.filter(StudentID__StudentID = studentid, project = project).delete()
+			AppliedProject.objects.filter(StudentID__StudentID = studentid, project = project).delete()
 		elif status=='3':
 			show_applied = 0
-		list_of_students_applied = UpdatedProject.objects.filter(project=project)
-		los_allocated = UpdatedProject.objects.filter(project=project,allocated=1,accept=0)
-		los_selected = UpdatedProject.objects.filter(project=project,allocated=1,accept=1)
+		list_of_students_applied = AppliedProject.objects.filter(project=project)
+		los_allocated = AppliedProject.objects.filter(project=project,allocated=1,accept=0)
+		los_selected = AppliedProject.objects.filter(project=project,allocated=1,accept=1)
 		los_applied = set(list_of_students_applied).difference(set(los_allocated)).difference(set(los_selected))
 		# print(model_to_dict(project))
 		return render(request, 'polls/instructor_project_detail.html',{'show_applied':show_applied,'project':project,'applied':los_applied,'allocated':los_allocated,'selected':los_selected})
@@ -575,7 +565,7 @@ def instructor_project_delete(request):
 		#project.title=title
 		#project.CPIcutoff=CPIcutoff
 		#project.max_no_of_students=max_no_of_students
-		project2 = UpdatedProject.objects.filter(project=project)
+		project2 = AppliedProject.objects.filter(project=project)
 		project.delete()
 		project2.delete()
 		# print(model_to_dict(project))
@@ -588,7 +578,7 @@ def instructor_project_close(request):
 		project_id = request.POST["projectid"]
 		instructor_id = request.POST["instructorid"]
 		project = AllProjects.objects.filter(ProjectID=project_id, InstructorID__InstructorID=instructor_id).update(project_status=0)
-		project2 = UpdatedProject.objects.filter(project=project,accept=0).delete()
+		project2 = AppliedProject.objects.filter(project=project,accept=0).delete()
 		return redirect('polls:instructor_home')
 	else:
 		return redirect('polls:instructor_home')
@@ -659,7 +649,7 @@ def instructor_allocated_projects(request):
 	if request.session.get('inst') != None:
 		instructor_id = request.session['inst']
 
-		# Allocated_projects_pending = UpdatedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 0)
+		# Allocated_projects_pending = AppliedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 0)
 		Allocated_projects_accepted = AllProjects.objects.filter(InstructorID__InstructorID = instructor_id, project_status=0)
 		print(instructor_id)
 		return render(request, 'polls/instructor_allocated_projects.html', {'Allocated_projects_accepted':Allocated_projects_accepted})

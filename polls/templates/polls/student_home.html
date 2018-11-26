@@ -1,15 +1,8 @@
 <html>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-        
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+     
 <style>
   /* @import url(http://fonts.googleapis.com/css?family=Lato:400,700); */
 
@@ -304,13 +297,13 @@ height: 40px;
         <form action={% url 'polls:student_project_cancel' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="projectid" value={{projects.ProjectID}}>
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
-          <input type="hidden" name="instructorname" value={{projects.InstructorID.Name}}>
           <input type="submit" value="Cancel">
         </form>
       </td>
       <td>
         <form action={% url 'polls:chat_detail' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="instructorid" value={{projects.InstructorID.InstructorID}}>
+          <input type="hidden" name="instructorname" value={{projects.InstructorID.Name}}>
           <input type="hidden" name="loginid" value='S'>
           <input type="submit" value="Chat">
         </form>
