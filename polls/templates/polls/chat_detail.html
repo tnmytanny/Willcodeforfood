@@ -6,6 +6,7 @@
 <html>
 	<head>
 		<title>Chat</title>
+
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -185,6 +186,13 @@
 		color: rgba(255,255,255,0.5);
 		font-size: 10px;
 	}
+	.form-style-4 input[type=submit]{
+		background: black;
+		border: none;
+		padding: 30px 10px 10px 2px;
+		border-radius: 5px;
+		font-size: 20px;
+	}
 	.msg_time_send{
 		position: relative;
 		right:0;
@@ -285,13 +293,13 @@
 									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
 									<span class="online_icon offline"></span>
 								</div>
-								<form action={% url 'polls:chat_detail' %} method="post">
+								<form class="form-style-4" action={% url 'polls:chat_detail' %} method="post">
 								{% csrf_token %}
       							{{ form }}
       							<input id="instructorid" type="hidden" name="instructorid" value={{allchat.InstructorID.InstructorID}}>
 								<input id="loginid" type="hidden" name="loginid" value= {{loginid}}>
 								<input id="instructorname" type="hidden" name="instructorname" value={{allchat.InstructorID.Name}}>
-  								<input class="user_info" type="submit" value={{allchat.InstructorID.Name}}></form>
+  								<input class="user_info" type="submit" value={{allchat.InstructorID.Name}} style="background-color:rgba(255,255,255,0.1) !important; color:white !important; border:none"/></form>
 								<!-- <div class="user_info">
 									<span>{{allchat.InstructorID.Name}}</span>
 								</div> -->
@@ -411,7 +419,7 @@
       							</ul>
 							</div>
 						</div>
-						<div class="card-body msg_card_body">
+						<div id='div1' class="card-body msg_card_body">
 							{% for messages in message %}
   							{% if loginid == 'S' %}
     						{% if messages.SenderID == 'S' %}
@@ -545,11 +553,12 @@
 		</div>
 	</body>
 	<script type="text/javascript">
-			$(document).ready(function(){
-$('#action_menu_btn').click(function(){
+	$(document).ready(function(){
+	$('#action_menu_btn').click(function(){
 	$('.action_menu').toggle();
-});
 	});
+	});
+	$('#div1').scrollTop($('#div1')[0].scrollHeight);
 	</script>
 </html>
 <!-- 

@@ -577,7 +577,8 @@ def instructor_project_change(request):
 		instructor_id = request.POST["instructorid"]
 		instructor1 = Instructors.objects.get(InstructorID=instructor_id)
 		title = request.POST["title"]
-		tag=request.POST["tags"]
+		tag=request.POST.getlist('tags')
+		print(tag)
 		description = request.POST["description"]
 		CPIcutoff = request.POST["CPIcutoff"]
 		max_no_of_students = request.POST["max_no_of_students"]
