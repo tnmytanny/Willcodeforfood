@@ -325,13 +325,13 @@
 									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
 									<span class="online_icon offline"></span>
 								</div>
-								<form action={% url 'polls:chat_detail' %} method="post">
+								<form class="form-style-4" action={% url 'polls:chat_detail' %} method="post">
 								{% csrf_token %}
       							{{ form }}
       							<input id="studentid" type="hidden" name="studentid" value={{allchat.StudentID.StudentID}}>
 								<input id="loginid" type="hidden" name="loginid" value= {{loginid}}>
 								<input id="studentname" type="hidden" name="studentname" value={{allchat.StudentID.Name}}>
-  								<input class="user_info" type="submit" value={{allchat.StudentID.Name}}></form>
+  								<input class="user_info" type="submit" value={{allchat.StudentID.Name}} style="background-color:rgba(255,255,255,0.1) !important; color:white !important; border:none"/></form>
 								<!-- <div class="user_info">
 									<span>{{allchat.InstructorID.Name}}</span>
 								</div> -->
