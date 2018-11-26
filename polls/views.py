@@ -357,26 +357,48 @@ def search_chat(request):
 
 def send_message(request):
 	if request.method == "POST":
-		message = request.POST["message"]
-		student_id = request.POST["studentid"]
-		instructor_id = request.POST["instructorid"]
-		inst_name = request.POST["instructorname"]
-		sender = request.POST["sender"]
-		print(sender)
-		print(student_id)
-		print(instructor_id)
-		print(inst_name)
-		Message_ID = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
-		chat = Message(MessageID=Message_ID,SenderID=sender,message=message,timestamp=timezone.now())
-		print(Message_ID)
-		chat.save()
-		mychat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
-		message = Message.objects.filter(MessageID=mychat)
-		noofmessages = len(message)
-		allchats = Chats.objects.filter(StudentID__StudentID = student_id)
-		chat = [mychat]
-		allchats = set(allchats).difference(set(chat))
-		return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'inst_name':inst_name,'allchats':allchats})
+		if request.session.get('stud') != None:
+			message = request.POST["message"]
+			student_id = request.POST["studentid"]
+			instructor_id = request.POST["instructorid"]
+			inst_name = request.POST["instructorname"]
+			sender = request.POST["sender"]
+			print(sender)
+			print(student_id)
+			print(instructor_id)
+			print(inst_name)
+			Message_ID = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			chat = Message(MessageID=Message_ID,SenderID=sender,message=message,timestamp=timezone.now())
+			print(Message_ID)
+			chat.save()
+			mychat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			message = Message.objects.filter(MessageID=mychat)
+			noofmessages = len(message)
+			allchats = Chats.objects.filter(StudentID__StudentID = student_id)
+			chat = [mychat]
+			allchats = set(allchats).difference(set(chat))
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'inst_name':inst_name,'allchats':allchats})
+		elif request.session.get('inst') != None:
+			message = request.POST["message"]
+			student_id = request.POST["studentid"]
+			instructor_id = request.POST["instructorid"]
+			stud_name = request.POST["studentname"]
+			sender = request.POST["sender"]
+			print(sender)
+			print(student_id)
+			print(instructor_id)
+			# print(inst_name)
+			Message_ID = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			chat = Message(MessageID=Message_ID,SenderID=sender,message=message,timestamp=timezone.now())
+			print(Message_ID)
+			chat.save()
+			mychat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			message = Message.objects.filter(MessageID=mychat)
+			noofmessages = len(message)
+			allchats = Chats.objects.filter(InstructorID__InstructorID = instructor_id)
+			chat = [mychat]
+			allchats = set(allchats).difference(set(chat))
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'stud_name':stud_name,'allchats':allchats})
 	else :
 		return redirect('polls:login')
 

@@ -23,8 +23,7 @@
 		}
 
 		.chat{
-			margin-top: auto;
-			margin-bottom: auto;
+			margin-top: 40px;
 		}
 		.card{
 			height: 500px;
@@ -189,7 +188,7 @@
 	.form-style-4 input[type=submit]{
 		background: black;
 		border: none;
-		padding: 30px 10px 10px 2px;
+		padding: 20px 10px 10px 2px;
 		border-radius: 5px;
 		font-size: 20px;
 	}
@@ -225,7 +224,12 @@
 	.action_menu ul{
 		list-style: none;
 		padding: 0;
-	margin: 0;
+		margin: 0;
+	}
+	.home{
+		position:fixed;
+		right:20px;
+		top:5px;
 	}
 	.action_menu ul li{
 		width: 100%;
@@ -247,6 +251,20 @@
 	}
 </style>
 	<body>
+			<form action={% url 'polls:login' %} method="post">
+					{% csrf_token %}
+					  {{ form }}
+					  <!-- <label for="UserID">UserID: </label>
+					  <input id="UserID" type="text" name="userid">
+					  <input id="password" type="text" name="password"> -->
+					  <!-- <input type="submit" value="Home"> -->
+					  <label class="home">
+				
+					  <button class="btn btn-default btn-sm button2"><i class="w3-margin-middle fa fa-home"></i></button>
+					  </label>
+				</form>
+
+
 		<div class="container-fluid h-100">
 			<div class="row justify-content-center h-100">
 				<div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
@@ -529,7 +547,7 @@
 								</div>
 								<textarea id="message" name="message" form= "myform" class="form-control type_msg" placeholder="Type your message..."></textarea>
 								<div class="input-group-append">
-									<form action={% url 'polls:send_message' %} method="post" id="myform">
+									<form class="form-style-4" action={% url 'polls:send_message' %} method="post" id="myform">
     								{% csrf_token %}
 							      	{{ form }}
 							      	<input id="instructorid" type="hidden" name="instructorid" value={{instructorid}}>
@@ -537,11 +555,11 @@
 							      	{% if loginid == 'S' %}
 							      	<input id="instructorname" type="hidden" name="instructorname" value={{inst_name}}>
 							      	{% elif loginid == 'I' %}
-							      	<input id="studentname" type="hidden" name="instructorname" value={{stud_name}}>
+							      	<input id="studentname" type="hidden" name="studentname" value={{stud_name}}>
 							      	{% endif %}
 							      	<!-- <input class= "form-control type_msg" id="message" type="text" name="message"> -->
 							      	<input id="sender" type="hidden" name="sender" value={{loginid}}>
-							      	<input type="submit" value="send">
+							      	<input type="submit" value="send" style="background-color:rgba(255,255,255,0.1) !important; color:white !important; border:none"/>
 							      	<!-- <span type= "submit" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span> -->
 									</form>
 								</div>
