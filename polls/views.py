@@ -210,6 +210,21 @@ def student_create_chat(request):
 			chat.save()
 	return redirect('polls:student_home')
 
+def instructor_create_chat(request):
+	if request.method == "POST":
+		instructor_id = request.session['inst']
+		#project_id = request.POST["projectid"]
+		student_id = request.POST["stud"]
+		student = Students.objects.get(StudentID=student_id)
+		instructor = Instructors.objects.get(InstructorID=instructor_id)
+		already_chat = Chats.objects.filter(StudentID=student,InstructorID=instructor)
+		print(already_chat)
+		if not already_chat:
+			chat = Chats(StudentID=student,InstructorID=instructor)
+			print("hey",chat)
+			chat.save()
+	return redirect('polls:instructor_home')
+
 def student_show_messages(request):
 	if request.method == "POST":
 		student_id = request.session['stud']
@@ -218,21 +233,49 @@ def student_show_messages(request):
 	else:
 		return redirect('polls:student_home')
 
+def instructor_show_messages(request):
+	if request.method == "POST":
+		instructor_id = request.session['inst']
+		chat = Chats.objects.filter(InstructorID__InstructorID=instructor_id)
+		print(chat)
+		return render(request,'polls/instructor_show_messages.html',{'chat':chat})
+	else:
+		return redirect('polls:instructor_home')
+
 def chat_detail(request):
 	if request.method == "POST":
 		if request.session.get('stud') != None:
 			student_id = request.session["stud"]
 			instructor_id = request.POST["instructorid"]
 			login_id = request.POST["loginid"]
+			inst_name = request.POST["instructorname"]
 			print(instructor_id)
 			print(student_id)
 			print(login_id)
 			
 			chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
 			message = Message.objects.filter(MessageID=chat)
-			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id})
+			noofmessages = len(message)
+			allchats = Chats.objects.filter(StudentID__StudentID = student_id)
+			chat = [chat]
+			allchats = set(allchats).difference(set(chat))
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'inst_name':inst_name,'allchats':allchats})
 		elif request.session.get('inst') != None:
-			return redirect('polls:instructor_home')
+			instructor_id = request.session["inst"]
+			student_id = request.POST["studentid"]
+			login_id = request.POST["loginid"]
+			stud_name = request.POST["studentname"]
+			print(instructor_id)
+			print(student_id)
+			print(login_id)
+			
+			chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			message = Message.objects.filter(MessageID=chat)
+			noofmessages = len(message)
+			allchats = Chats.objects.filter(InstructorID__InstructorID = instructor_id)
+			chat = [chat]
+			allchats = set(allchats).difference(set(chat))
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'stud_name':stud_name,'allchats':allchats})
 	else:
 		return redirect('polls:login')
 
@@ -241,17 +284,23 @@ def send_message(request):
 		message = request.POST["message"]
 		student_id = request.POST["studentid"]
 		instructor_id = request.POST["instructorid"]
+		inst_name = request.POST["instructorname"]
 		sender = request.POST["sender"]
 		print(sender)
 		print(student_id)
 		print(instructor_id)
+		print(inst_name)
 		Message_ID = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
 		chat = Message(MessageID=Message_ID,SenderID=sender,message=message,timestamp=timezone.now())
 		print(Message_ID)
 		chat.save()
 		mychat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
 		message = Message.objects.filter(MessageID=mychat)
-		return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id})
+		noofmessages = len(message)
+		allchats = Chats.objects.filter(StudentID__StudentID = student_id)
+		chat = [mychat]
+		allchats = set(allchats).difference(set(chat))
+		return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'inst_name':inst_name,'allchats':allchats})
 	else :
 		return redirect('polls:login')
 
@@ -263,12 +312,12 @@ def change_password(request):
 			newpass = request.POST["newpass"]
 			newpassagain = request.POST["newpassagain"]
 			change_pass=2
-			instructor1 = Instructors.objects.filter(InstructorID=instructor_id,Password=oldpass)
+			instructor1 = Instructors.objects.filter(InstructorID=instructor_homeid,Password=oldpass)
 			if(newpassagain==newpass and instructor1):
 				Instructors.objects.filter(InstructorID=instructor_id,Password=oldpass).update(Password=newpass)
 				change_pass=1
 			project_list = AllProjects.objects.filter(InstructorID__InstructorID = instructor_id,project_status=1)
-			return render(request, 'polls/instructor_home.html', {'project_list':project_list,'instructor_id':instructor_id,'change_pass':change_pass})#,'project2':project2})
+			return render(request, 'polls/instructor_home.html', {'project_list':project_list,'instructor_id':instructor_id,'change_pass':change_pass})
 		elif request.session.get('stud') != None:
 			student_id = request.session['stud']
 			oldpass = request.POST["oldpass"]
@@ -329,6 +378,10 @@ def change_password(request):
 # 		return render(request,'polls/student_instructor_chat.html',{'messages':messages,'student_id':student_id,'instructor_id':instructor_id})#,{'instructorid':instructor_id})#,{'messages':messages,'student_id':student_id.StudentID})
 # 	else:
 # 		return render(request,'polls/student_instructor_chat.html')
+
+
+
+
 
 def instructor_home(request):
 	if request.session.get('inst') != None:

@@ -11,6 +11,7 @@
       <td>
         <form action={% url 'polls:chat_detail' %} method="post">{% csrf_token %}{{ form }}
           <input type="hidden" name="instructorid" value={{chats.InstructorID.InstructorID}}>
+          <input type="hidden" name="instructorname" value={{chats.InstructorID.Name}}>
           <input type="hidden" name="loginid" value='S'>
           <input type="submit" value="Chat Details">
         </form>

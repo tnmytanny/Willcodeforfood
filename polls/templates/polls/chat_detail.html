@@ -1,37 +1,544 @@
-<style>
-.container {
-    border-radius: 25px;
-    background-color: lightgrey;
-    width: 50%;
-    padding: 5px;
-    float: left;
-    margin: 5px;
-    padding-left: 10px;
-}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-.darker {
-    border-radius: 25px;
-    background-color: lightblue;
-    width: 50%;
-    float: right;
-    text-align: right;
-    padding: 5px;
-    margin: 5px;
-    padding-top: 0px;
-    padding-right: 10px;
-}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
+	</head>
+	<style>
+		body,html{
+			height: 100%;
+			margin: 0;
+			background: #7F7FD5;
+	       background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+	        background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+		}
 
-.time-right {
-  font-size: 15;
-  float: right;
-  color: #aaa;
-}
-.time-left {
-  font-size: 15;
-  float: left;
-  color: #999;
-}
+		.chat{
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+		.card{
+			height: 500px;
+			border-radius: 15px !important;
+			background-color: rgba(0,0,0,0.4) !important;
+		}
+		.contacts_body{
+			padding:  0.75rem 0 !important;
+			overflow-y: auto;
+			white-space: nowrap;
+		}
+		.msg_card_body{
+			overflow-y: auto;
+		}
+		.card-header{
+			border-radius: 15px 15px 0 0 !important;
+			border-bottom: 0 !important;
+		}
+	 .card-footer{
+		border-radius: 0 0 15px 15px !important;
+			border-top: 0 !important;
+	}
+		.container{
+			align-content: center;
+		}
+		.search{
+			border-radius: 15px 0 0 15px !important;
+			background-color: rgba(0,0,0,0.3) !important;
+			border:0 !important;
+			color:white !important;
+		}
+		.search:focus{
+		     box-shadow:none !important;
+           outline:0px !important;
+		}
+		.type_msg{
+			background-color: rgba(0,0,0,0.3) !important;
+			border:0 !important;
+			color:white !important;
+			height: 60px !important;
+			overflow-y: auto;
+		}
+			.type_msg:focus{
+		     box-shadow:none !important;
+           outline:0px !important;
+		}
+		.attach_btn{
+	border-radius: 15px 0 0 15px !important;
+	background-color: rgba(0,0,0,0.3) !important;
+			border:0 !important;
+			color: white !important;
+			cursor: pointer;
+		}
+		.send_btn{
+	border-radius: 0 15px 15px 0 !important;
+	background-color: rgba(0,0,0,0.3) !important;
+			border:0 !important;
+			color: white !important;
+			cursor: pointer;
+		}
+		.search_btn{
+			border-radius: 0 15px 15px 0 !important;
+			background-color: rgba(0,0,0,0.3) !important;
+			border:0 !important;
+			color: white !important;
+			cursor: pointer;
+		}
+		.contacts{
+			list-style: none;
+			padding: 0;
+		}
+		.contacts li{
+			width: 100% !important;
+			padding: 5px 10px;
+			margin-bottom: 15px !important;
+		}
+	.active{
+			background-color: rgba(0,0,0,0.3);
+	}
+		.user_img{
+			height: 70px;
+			width: 70px;
+			border:1.5px solid #f5f6fa;
+		
+		}
+		.user_img_msg{
+			height: 40px;
+			width: 40px;
+			border:1.5px solid #f5f6fa;
+		
+		}
+	.img_cont{
+			position: relative;
+			height: 70px;
+			width: 70px;
+	}
+	.img_cont_msg{
+			height: 40px;
+			width: 40px;
+	}
+	.online_icon{
+		position: absolute;
+		height: 15px;
+		width:15px;
+		background-color: #4cd137;
+		border-radius: 50%;
+		bottom: 0.2em;
+		right: 0.4em;
+		border:1.5px solid white;
+	}
+	.offline{
+		background-color: #c23616 !important;
+	}
+	.user_info{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 15px;
+	}
+	.user_info span{
+		font-size: 20px;
+		color: white;
+	}
+	.user_info p{
+	font-size: 10px;
+	color: rgba(255,255,255,0.6);
+	}
+	.video_cam{
+		margin-left: 50px;
+		margin-top: 5px;
+	}
+	.video_cam span{
+		color: white;
+		font-size: 20px;
+		cursor: pointer;
+		margin-right: 20px;
+	}
+	.msg_cotainer{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-left: 10px;
+		border-radius: 25px;
+		background-color: #82ccdd;
+		padding: 10px;
+		position: relative;
+	}
+	.msg_cotainer_send{
+		margin-top: auto;
+		margin-bottom: auto;
+		margin-right: 10px;
+		border-radius: 25px;
+		background-color: #78e08f;
+		padding: 10px;
+		position: relative;
+	}
+	.msg_time{
+		position: relative;
+		left: 0;
+		bottom: -25px;
+		color: rgba(255,255,255,0.5);
+		font-size: 10px;
+	}
+	.msg_time_send{
+		position: relative;
+		right:0;
+		bottom: -25px;
+		color: rgba(255,255,255,0.5);
+		font-size: 10px;
+	}
+	.msg_head{
+		position: relative;
+	}
+	#action_menu_btn{
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		color: white;
+		cursor: pointer;
+		font-size: 20px;
+	}
+	.action_menu{
+		z-index: 1;
+		position: absolute;
+		padding: 15px 0;
+		background-color: rgba(0,0,0,0.5);
+		color: white;
+		border-radius: 15px;
+		top: 30px;
+		right: 15px;
+		display: none;
+	}
+	.action_menu ul{
+		list-style: none;
+		padding: 0;
+	margin: 0;
+	}
+	.action_menu ul li{
+		width: 100%;
+		padding: 10px 15px;
+		margin-bottom: 5px;
+	}
+	.action_menu ul li i{
+		padding-right: 10px;
+	
+	}
+	.action_menu ul li:hover{
+		cursor: pointer;
+		background-color: rgba(0,0,0,0.2);
+	}
+	@media(max-width: 576px){
+	.contacts_card{
+		margin-bottom: 15px !important;
+	}
+	}
 </style>
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+				<div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
+					<div class="card-header">
+						<div class="input-group">
+							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<div class="input-group-prepend">
+								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="card-body contacts_body">
+						<ui class="contacts">
+						{% if loginid == 'S' %}
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>{{inst_name}}</span>
+								</div>
+							</div>
+						</li>
+						{% for allchat in allchats %}
+						<li>
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
+									<span class="online_icon offline"></span>
+								</div>
+								<form action={% url 'polls:chat_detail' %} method="post">
+								{% csrf_token %}
+      							{{ form }}
+      							<input id="instructorid" type="hidden" name="instructorid" value={{allchat.InstructorID.InstructorID}}>
+								<input id="loginid" type="hidden" name="loginid" value= {{loginid}}>
+								<input id="instructorname" type="hidden" name="instructorname" value={{allchat.InstructorID.Name}}>
+  								<input class="user_info" type="submit" value={{allchat.InstructorID.Name}}></form>
+								<!-- <div class="user_info">
+									<span>{{allchat.InstructorID.Name}}</span>
+								</div> -->
+							</div>
+						</li>
+						{% endfor %}
+						{% elif loginid == 'I' %}
+						<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>{{stud_name}}</span>
+								</div>
+							</div>
+						</li>
+						{% for allchat in allchats %}
+						<li>
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
+									<span class="online_icon offline"></span>
+								</div>
+								<form action={% url 'polls:chat_detail' %} method="post">
+								{% csrf_token %}
+      							{{ form }}
+      							<input id="studentid" type="hidden" name="studentid" value={{allchat.StudentID.StudentID}}>
+								<input id="loginid" type="hidden" name="loginid" value= {{loginid}}>
+								<input id="studentname" type="hidden" name="studentname" value={{allchat.StudentID.Name}}>
+  								<input class="user_info" type="submit" value={{allchat.StudentID.Name}}></form>
+								<!-- <div class="user_info">
+									<span>{{allchat.InstructorID.Name}}</span>
+								</div> -->
+							</div>
+						</li>
+						{% endfor %}
+						{% endif %}
+						<!-- <li>
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://i.pinimg.com/originals/54/6e/6d/546e6d4c6ce4322e6aa3b2f8ca73ac28.jpg" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>Yolduz Rafi</span>
+									<p>Yolduz is online</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/07/sweet-girl-profile-pictures-9.jpg" class="rounded-circle user_img">
+									<span class="online_icon offline"></span>
+								</div>
+								<div class="user_info">
+									<span>Nargis Hawa</span>
+									<p>Nargis left 30 mins ago</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://www.freshmorningquotes.com/wp-content/uploads/2015/11/cute-and-beautifull-girls-profile-pictures.jpg" class="rounded-circle user_img">
+									<span class="online_icon offline"></span>
+								</div>
+								<div class="user_info">
+									<span>Khadija Mehr</span>
+									<p>Khadija left 50 mins ago</p>
+								</div>
+							</div>
+						</li> -->
+						</ui>
+					</div>
+					<div class="card-footer"></div>
+				</div></div>
+				<div class="col-md-8 col-xl-6 chat">
+					<div class="card">
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>
+										{% if loginid == 'S' %}
+										{{inst_name}}
+										{% elif loginid == 'I' %}
+										{{stud_name}}
+										{% endif %}
+									</span>
+									<p>{{noofmessages}} messages</p>
+								</div>
+								<!-- <div class="video_cam">
+									<span><i class="fas fa-video"></i></span>
+									<span><i class="fas fa-phone"></i></span>
+								</div> -->
+							</div>
+							<span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+							<div class="action_menu">
+								<ul>
+									{% if loginid == 'I' %}
+									<li><form action={% url 'polls:student_profile' %} method="post"><i class="fas fa-user-circle"></i>
+									{% csrf_token %}
+							      	{{ form }}
+							      	<input id="studentid" type="hidden" name="studentid" value={{studentid}}>
+      								<input type="submit" value="View profile"></form></li>
+      								{% endif %}
+      								<li><form action={% url 'polls:logout' %} method="post"><i class="fas fa-user-circle"></i>
+									{% csrf_token %}
+							      	{{ form }}
+      								<input type="submit" value="Logout"></form></li>
+      							</ul>
+							</div>
+						</div>
+						<div class="card-body msg_card_body">
+							{% for messages in message %}
+  							{% if loginid == 'S' %}
+    						{% if messages.SenderID == 'S' %}
+    						<div class="d-flex justify-content-end mb-4">
+								<div class="msg_cotainer_send">
+									{{messages.message}}
+									<span class="msg_time_send">{{messages.timestamp}}</span>
+								</div>
+								<div class="img_cont_msg">
+							<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img_msg">
+								</div>
+							</div>
+							{% elif messages.SenderID == 'I' %}
+							<div class="d-flex justify-content-start mb-4">
+								<div class="img_cont_msg">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img_msg">
+								</div>
+								<div class="msg_cotainer">
+									{{messages.message}}
+									<span class="msg_time">{{messages.timestamp}}</span>
+								</div>
+							</div>
+							{% endif %}
+							{% elif loginid == 'I' %}
+							{% if messages.SenderID == 'S' %}
+    						<div class="d-flex justify-content-start mb-4">
+								<div class="img_cont_msg">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img_msg">
+								</div>
+								<div class="msg_cotainer">
+									{{messages.message}}
+									<span class="msg_time">{{messages.timestamp}}</span>
+								</div>
+							</div>
+							{% elif messages.SenderID == 'I' %}
+							<div class="d-flex justify-content-end mb-4">
+								<div class="msg_cotainer_send">
+									{{messages.message}}
+									<span class="msg_time_send">{{messages.timestamp}}</span>
+								</div>
+								<div class="img_cont_msg">
+									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img_msg">
+								</div>
+							</div>
+							{% endif %}
+							{% endif %}
+							{% endfor %}
+							<!-- <div class="d-flex justify-content-end mb-4">
+								<div class="msg_cotainer_send">
+									Hi Maryam i am good tnx how about you?
+									<span class="msg_time_send">8:55 AM, Today</span>
+								</div>
+								<div class="img_cont_msg">
+							<img src="https://yt3.ggpht.com/a-/AJLlDp2tfEIfHjdh3f5ukUFjBFykKQaWGmacHNAL3g=s900-mo-c-c0xffffffff-rj-k-no" class="rounded-circle user_img_msg">
+								</div>
+							</div>
+							<div class="d-flex justify-content-start mb-4">
+								<div class="img_cont_msg">
+									<img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img_msg">
+								</div>
+								<div class="msg_cotainer">
+									I am good too, thank you for your chat template
+									<span class="msg_time">9:00 AM, Today</span>
+								</div>
+							</div>
+							<div class="d-flex justify-content-end mb-4">
+								<div class="msg_cotainer_send">
+									You welcome Maryam
+									<span class="msg_time_send">9:05 AM, Today</span>
+								</div>
+								<div class="img_cont_msg">
+							<img src="https://yt3.ggpht.com/a-/AJLlDp2tfEIfHjdh3f5ukUFjBFykKQaWGmacHNAL3g=s900-mo-c-c0xffffffff-rj-k-no" class="rounded-circle user_img_msg">
+								</div>
+							</div>
+							<div class="d-flex justify-content-start mb-4">
+								<div class="img_cont_msg">
+									<img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img_msg">
+								</div>
+								<div class="msg_cotainer">
+									I am looking for your next templates
+									<span class="msg_time">9:07 AM, Today</span>
+								</div>
+							</div>
+							<div class="d-flex justify-content-end mb-4">
+								<div class="msg_cotainer_send">
+									Ok, thank you have a good day
+									<span class="msg_time_send">9:10 AM, Today</span>
+								</div>
+								<div class="img_cont_msg">
+						<img src="https://yt3.ggpht.com/a-/AJLlDp2tfEIfHjdh3f5ukUFjBFykKQaWGmacHNAL3g=s900-mo-c-c0xffffffff-rj-k-no" class="rounded-circle user_img_msg">
+								</div>
+							</div>
+							<div class="d-flex justify-content-start mb-4">
+								<div class="img_cont_msg">
+									<img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img_msg">
+								</div>
+								<div class="msg_cotainer">
+									Bye, see you
+									<span class="msg_time">9:12 AM, Today</span>
+								</div>
+							</div> -->
+						</div>
+						<div class="card-footer">
+							<div class="input-group">
+								<div class="input-group-append">
+									<span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+								</div>
+								<textarea id="message" name="message" form= "myform" class="form-control type_msg" placeholder="Type your message..."></textarea>
+								<div class="input-group-append">
+									<form action={% url 'polls:send_message' %} method="post" id="myform">
+    								{% csrf_token %}
+							      	{{ form }}
+							      	<input id="instructorid" type="hidden" name="instructorid" value={{instructorid}}>
+							      	<input id="studentid" type="hidden" name="studentid" value={{studentid}}>
+							      	{% if loginid == 'S' %}
+							      	<input id="instructorname" type="hidden" name="instructorname" value={{inst_name}}>
+							      	{% elif loginid == 'I' %}
+							      	<input id="studentname" type="hidden" name="instructorname" value={{stud_name}}>
+							      	{% endif %}
+							      	<!-- <input class= "form-control type_msg" id="message" type="text" name="message"> -->
+							      	<input id="sender" type="hidden" name="sender" value={{loginid}}>
+							      	<input type="submit" value="send">
+							      	<!-- <span type= "submit" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span> -->
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+			$(document).ready(function(){
+$('#action_menu_btn').click(function(){
+	$('.action_menu').toggle();
+});
+	});
+	</script>
+</html>
+<!-- 
 {% for messages in message %}
   {% if loginid == 'S' %}
     {% if messages.SenderID == 'S' %}
@@ -65,16 +572,12 @@
 <form action={% url 'polls:login' %} method="post">
     {% csrf_token %}
       {{ form }}
-      <!-- <label for="UserID">UserID: </label> -->
       <input type="submit" value="Home">
 </form>
 
 <form action={% url 'polls:logout' %} method="post">
     {% csrf_token %}
       {{ form }}
-      <!-- <label for="UserID">UserID: </label>
-      <input id="UserID" type="text" name="userid">
-      <input id="password" type="text" name="password"> -->
       <input type="submit" value="logout">
 </form>
 
@@ -86,4 +589,4 @@
       <input id="message" type="text" name="message">
       <input id="sender" type="hidden" name="sender" value={{loginid}}>
       <input type="submit" value="Send">
-</form>
+</form> -->
