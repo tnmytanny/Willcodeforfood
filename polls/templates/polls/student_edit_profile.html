@@ -20,10 +20,10 @@
     <p>{{ form.docfile }}</p>
     <p><input type="submit" value="Upload"/></p>
 </form>
+{% endif %}
 {% if status %}
 <p>Resume Uploaded succesfully</p>
 {% endif %}
-{% endif %}
-<form action={% url 'polls:login' %} method="post">{% csrf_token %}{{ form }}
+<a href={% url 'polls:login' %} method="post">
     <p><input type="submit" value="Home"></p>
 </form>
