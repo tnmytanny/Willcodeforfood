@@ -1,4 +1,9 @@
 <html>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
         body {
           background-color: #436145;
@@ -15,7 +20,23 @@
           text-align: center;
           text-transform: uppercase;
         }
-        
+        div.myclass {
+          color: black;
+          display: none;
+        }
+        p.show {
+          /*background-color: #eee;*/
+          color: black;
+          cursor: pointer;
+          padding: 18px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          font-size: 15px;
+          transition: 0.1s;
+        }
+
         img {
           border-radius: 50%;
           height: 60px;
@@ -51,6 +72,7 @@
           text-align: left;
         }
         table th {
+          text-align: center;
           background-color: #daeff1;
           font-weight: 300;
         }
@@ -165,18 +187,48 @@
             overflow: visible;
           }
         }
-        
-        
+        .logoutLblPos{
+
+          position:fixed;
+          right:10px;
+          top:5px;
+        }
+        .button2 {background-color: #daeff1;}
+        .btn {
+          height: 40px;
+        }
         
         </style>
-<div class="table-users">
+<div style="width:400px;">
+    <div style="float: left; width: 130px"> 
+        <form action={% url 'polls:instructor_new_project' %} method="post">
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label> -->
+      <input name="instructorid" type="hidden" value={{instructor_id}}>
+      <button class="btn btn-default btn-sm button2">Add project<i class="w3-margin-left fa fa-plus"></i></button>
+</form>
+    </div>
+    <div style="float: right; width: 225px"> 
+        <form action={% url 'polls:login' %} method="post">
+<!-- >>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d -->
+    {% csrf_token %}
+      {{ form }}
+      <!-- <label for="UserID">UserID: </label>
+      <input id="UserID" type="text" name="userid">
+      <input id="password" type="text" name="password"> -->
+      <button class="btn btn-default btn-sm button2"><i class="w3-margin-middle fa fa-home"></i></button>
+</form>
+    </div>
+  </div>
+<div style="float: middle" class="table-users">
     <div class="header">Users</div>
  
   <table cellspacing="0">
   <tr>
     <th>Title</th>
-    <th>Project Title</th>
     <th>Details</th>
+    <th>Edit</th>
     <th>Delete Project</th>
     <th>Close Project</th>
   </tr>
@@ -216,23 +268,18 @@
 
 </table>
 </div>
-<form action={% url 'polls:instructor_new_project' %} method="post">
-    {% csrf_token %}
-      {{ form }}
-      <!-- <label for="UserID">UserID: </label> -->
-      <input name="instructorid" type="hidden" value={{instructor_id}}>
-      <input type="submit" value="Add new project">
-</form>
-
 <form action={% url 'polls:logout' %} method="post">
     {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <input type="submit" value="logout">
+      <label class="logoutLblPos">
+      <button class="btn btn-default btn-sm button2">
+          <span class="glyphicon glyphicon-log-out"></span> Log out
+      </button>
+      </label>
 </form>
-
 <form action={% url 'polls:instructor_allocated_projects' %} method="post">
     {% csrf_token %}
       {{ form }}
@@ -259,8 +306,9 @@
       <!-- <input id="password" type="text" name="password"> -->
       <input type="submit" value="Create Chat">
 </form>
-<p><b>To change password</b>
-<form action={% url 'polls:change_password' %} method="post">
+<p class="show" onclick="myFunction()"><b>Click to change password</b></p>
+<div id="mydiv" class="myclass">
+  <form action={% url 'polls:change_password' %} method="post">
     {% csrf_token %}
       {{ form }}
       <label for="oldpass">Enter Old Password: </label>
@@ -277,4 +325,15 @@ password changed succesfully
 Password entered is incorrect
 {% endif %}
 </p>
+</div>
+<script>
+  function myFunction() {
+    var x = document.getElementById("mydiv");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
 </html>
