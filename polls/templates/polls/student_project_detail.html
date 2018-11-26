@@ -1,3 +1,42 @@
+<html>
+    <head>
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    </head>
+<style>
+
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700);
+body > div
+{
+    font-family: 'Lato', 'sans-serif';
+    background-color: #0c404d;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    }
+.profile 
+{
+    min-height: 355px;
+    display: inline-block;
+    }
+.divider 
+{
+    border-top:1px solid rgba(0,0,0,0.1);
+    }
+span.tags 
+{
+    background: #1abc9c;
+    border-radius: 2px;
+    color: #f5f5f5;
+    font-weight: bold;
+    padding: 2px 4px;
+    }
+</style>
+
 <h1 align="center">{{project.title}}</h1>
 <p><b>Instructor</b>: {{project.InstructorID.Name}}</p>
 <p><b>CPI cutoff</b>: {{project.CPIcutoff}}</p>
