@@ -240,8 +240,13 @@ height: 40px;
       <!-- <label for="UserID">UserID: </label> -->
       <input id="filter_tag" type="text" name="filter_tag">
       <!-- <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Filter">
-</form>
+      <!-- <input type="submit" value="Filter"> -->
+      <button class="btn btn-default btn-sm button2">
+        <span class="glyphicon glyphicon-search"></span> Filter
+    </button>
+
+
+    </form>
 
 <div style="float: middle" class="table-users">
 <div class="table-users">
@@ -321,7 +326,11 @@ height: 40px;
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Allocated Projects">
+      <!-- <input type="submit" value="Allocated Projects"> -->
+      <button class="btn btn-default btn-sm button2">
+        <span class="glyphicon glyphicon-th-list"></span> Allocated Projects
+    </button>
+
 </form>
 
 <form action={% url 'polls:student_show_messages' %} method="post">
@@ -346,7 +355,10 @@ height: 40px;
       <!-- <label for="UserID">UserID: </label> -->
       <input id="instructorid" type="text" name="instructorid">
       <!-- <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Create Chat">
+      <!-- <input type="submit" value="Create Chat"> -->
+      <button class="btn btn-default btn-sm button2">
+        <span class="glyphicon glyphicon-pencil"></span> Create Chat
+    </button>
 </form>
 <p class="show" onclick="myFunction()"><b>Click to change password</b></p>
 <div id="mydiv" class="myclass">
@@ -354,11 +366,11 @@ height: 40px;
     {% csrf_token %}
       {{ form }}
       <p><label for="oldpass">Enter Old Password: </label>
-      <input id="oldpass" type="text" name="oldpass"></p>
+      <input id="oldpass" type="password" name="oldpass"></p>
       <p><label for="newpass">Enter New Password: </label>
-      <input id="newpass" type="text" name="newpass"></p>
+      <input id="newpass" type="password" name="newpass"></p>
       <p><label for="newpassagain">Enter New Password again: </label>
-      <input id="newpassagain" type="text" name="newpassagain"></p>
+      <input id="newpassagain" type="password" name="newpassagain"></p>
       <p><input type="submit" value="Change Password"></p>
 </form>
 {% if change_pass == 1 %}

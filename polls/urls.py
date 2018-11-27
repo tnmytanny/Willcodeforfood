@@ -17,8 +17,13 @@ urlpatterns = [
     path('student_project_reject/', views.student_project_reject, name='student_project_reject'),
     path('student_edit_profile/', views.student_edit_profile, name='student_edit_profile'),
     path('student_profile/', views.student_profile, name='student_profile'),
+    path('instructor_edit_profile/', views.instructor_edit_profile, name='instructor_edit_profile'),
+    path('instructor_update_profile/', views.instructor_update_profile, name='instructor_update_profile'),
+    path('student_update_profile/', views.student_update_profile, name='student_update_profile'),
+    path('instructor_profile/', views.instructor_profile, name='instructor_profile'),
     path('student_filter_project/', views.student_filter_project, name='student_filter_project'),
     path('search_chat/', views.search_chat, name='search_chat'),
+
     # path('student_inst_chat/', views.student_inst_chat, name='student_inst_chat'),
     # path('student_new_message/', views.student_new_message, name='student_new_message'),
     path('student_create_chat/', views.student_create_chat, name='student_create_chat'),

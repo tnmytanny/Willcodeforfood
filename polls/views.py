@@ -14,6 +14,9 @@ from .models import Chats
 from django.template import RequestContext
 from django.urls import reverse
 from .models import Document
+from .models import InstDoc
+from .models import StudentPic
+from .models import InstructorPic
 from .forms import DocumentForm
 
 def login(request):
@@ -121,7 +124,7 @@ def student_allocated_projects(request):
 	if request.session.get('stud') != None:
 		student_id = request.session['stud']
 
-		Allocated_projects_pending = AppliedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 0)
+		Allocated_projects_pending = AppliedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 0,project__project_status=1)
 		Allocated_projects_accepted = AppliedProject.objects.filter(StudentID__StudentID = student_id, allocated = 1, accept = 1)
 		return render(request, 'polls/student_allocated_projects.html', {'Allocated_projects_pending':Allocated_projects_pending, 'Allocated_projects_accepted':Allocated_projects_accepted})
 	else:
@@ -272,13 +275,32 @@ def chat_detail(request):
 			print(student_id)
 			print(login_id)
 			
-			chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
-			message = Message.objects.filter(MessageID=chat)
-			noofmessages = len(message)
-			allchats = Chats.objects.filter(StudentID__StudentID = student_id)
-			chat = [chat]
-			allchats = set(allchats).difference(set(chat))
-			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'inst_name':inst_name,'allchats':allchats})
+			chat = Chats.objects.filter(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			if chat:
+				chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+				message = Message.objects.filter(MessageID=chat)
+				noofmessages = len(message)
+				allchats = Chats.objects.filter(StudentID__StudentID = student_id)
+				chat = [chat]
+				allchats = set(allchats).difference(set(chat))
+				instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+				instructor1 = model_to_dict(instructor_pic)
+				url_of_image = instructor1['docfile']
+
+				url_of_image = str(url_of_image)
+				url_of_image = '/media/' + url_of_image
+				print("kjskasjk",url_of_image)
+				student_pic = StudentPic.objects.get(StudentID=student_id)
+				student1 = model_to_dict(student_pic)
+				myimage = student1['docfile']
+
+				myimage = str(myimage)
+				myimage = '/media/' + myimage
+				
+				return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'inst_name':inst_name,'allchats':allchats,'url_of_image':url_of_image,'myimage':myimage})
+			else:
+				chat = Chats.objects.filter(StudentID__StudentID=student_id)
+				return render(request,'polls/student_show_messages.html',{'chat':chat})
 		elif request.session.get('inst') != None:
 			instructor_id = request.session["inst"]
 			student_id = request.POST["studentid"]
@@ -287,15 +309,31 @@ def chat_detail(request):
 			print(instructor_id)
 			print(student_id)
 			print(login_id)
-			
-			chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
-			message = Message.objects.filter(MessageID=chat)
-			noofmessages = len(message)
-			allchats = Chats.objects.filter(InstructorID__InstructorID = instructor_id)
-			chat = [chat]
-			allchats = set(allchats).difference(set(chat))
-			print(student_id)
-			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'stud_name':stud_name,'allchats':allchats})
+			chat = Chats.objects.filter(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+			if chat:
+				chat = Chats.objects.get(StudentID__StudentID=student_id,InstructorID__InstructorID=instructor_id)
+				message = Message.objects.filter(MessageID=chat)
+				noofmessages = len(message)
+				allchats = Chats.objects.filter(InstructorID__InstructorID = instructor_id)
+				chat = [chat]
+				allchats = set(allchats).difference(set(chat))
+				print(student_id)
+				student_pic = StudentPic.objects.get(StudentID=student_id)
+				student1 = model_to_dict(student_pic)
+				url_of_image = student1['docfile']
+				url_of_image = str(url_of_image)
+				url_of_image = '/media/' + url_of_image
+				print("kjskasjk",url_of_image)
+				instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+				instructor1 = model_to_dict(instructor_pic)
+				myimage = instructor1['docfile']
+				myimage = str(myimage)
+				myimage = '/media/' + myimage
+				print("kjskasjk",myimage)
+				return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'stud_name':stud_name,'allchats':allchats,'url_of_image':url_of_image,'myimage':myimage})
+			else:
+				chat = Chats.objects.filter(InstructorID__InstructorID=instructor_id)
+				return render(request,'polls/instructor_show_messages.html',{'chat':chat})
 	else:
 		return redirect('polls:login')
 
@@ -318,7 +356,21 @@ def search_chat(request):
 			allchats = Chats.objects.filter(StudentID__StudentID = student_id,InstructorID__Name__contains=search_name)
 			chat = [chat]
 			allchats = set(allchats).difference(set(chat))
-			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmsg,'inst_name':inst_name,'allchats':allchats})
+			instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+			instructor1 = model_to_dict(instructor_pic)
+			url_of_image = instructor1['docfile']
+
+			url_of_image = str(url_of_image)
+			url_of_image = '/media/' + url_of_image
+			print("kjskasjk",url_of_image)
+			student_pic = StudentPic.objects.get(StudentID=student_id)
+			student1 = model_to_dict(student_pic)
+			myimage = student1['docfile']
+
+			myimage = str(myimage)
+			myimage = '/media/' + myimage
+			
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmsg,'inst_name':inst_name,'allchats':allchats,'url_of_image':url_of_image,'myimage':myimage})
 		elif request.session.get('inst') != None:
 			instructor_id = request.session["inst"]
 			student_id = request.POST["studentid"]
@@ -340,7 +392,20 @@ def search_chat(request):
 			allchats = Chats.objects.filter(InstructorID__InstructorID = instructor_id,StudentID__Name__contains=search_name)
 			chat = [chat]
 			allchats = set(allchats).difference(set(chat))
-			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmsg,'stud_name':stud_name,'allchats':allchats})
+			student_pic = StudentPic.objects.get(StudentID=student_id)
+			student1 = model_to_dict(student_pic)
+			url_of_image = student1['docfile']
+
+			url_of_image = str(url_of_image)
+			url_of_image = '/media/' + url_of_image
+			print("kjskasjk",url_of_image)
+			instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+			instructor1 = model_to_dict(instructor_pic)
+			myimage = instructor1['docfile']
+
+			myimage = str(myimage)
+			myimage = '/media/' + myimage
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':login_id,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmsg,'stud_name':stud_name,'allchats':allchats,'url_of_image':url_of_image,'myimage':myimage})
 	else:
 		return redirect('polls:login')
 
@@ -367,7 +432,21 @@ def send_message(request):
 			allchats = Chats.objects.filter(StudentID__StudentID = student_id)
 			chat = [mychat]
 			allchats = set(allchats).difference(set(chat))
-			return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'inst_name':inst_name,'allchats':allchats})
+			instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+			instructor1 = model_to_dict(instructor_pic)
+			url_of_image = instructor1['docfile']
+
+			url_of_image = str(url_of_image)
+			url_of_image = '/media/' + url_of_image
+			print("kjskasjk",url_of_image)
+			student_pic = StudentPic.objects.get(StudentID=student_id)
+			student1 = model_to_dict(student_pic)
+			myimage = student1['docfile']
+
+			myimage = str(myimage)
+			myimage = '/media/' + myimage
+			
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'inst_name':inst_name,'allchats':allchats,'url_of_image':url_of_image,'myimage':myimage})
 		elif request.session.get('inst') != None:
 			message = request.POST["message"]
 			student_id = request.POST["studentid"]
@@ -388,7 +467,19 @@ def send_message(request):
 			allchats = Chats.objects.filter(InstructorID__InstructorID = instructor_id)
 			chat = [mychat]
 			allchats = set(allchats).difference(set(chat))
-			return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'stud_name':stud_name,'allchats':allchats})
+			student_pic = StudentPic.objects.get(StudentID=student_id)
+			student1 = model_to_dict(student_pic)
+			url_of_image = student1['docfile']
+
+			url_of_image = str(url_of_image)
+			url_of_image = '/media/' + url_of_image
+			print("kjskasjk",url_of_image)
+			instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+			instructor1 = model_to_dict(instructor_pic)
+			myimage = instructor1['docfile']
+			myimage = str(myimage)
+			myimage = '/media/' + myimage
+			return render(request,'polls/chat_detail.html',{'message':message,'loginid':sender,'instructorid':instructor_id,'studentid':student_id,'noofmessages':noofmessages,'stud_name':stud_name,'allchats':allchats,'url_of_image':url_of_image,'myimage':myimage})
 	else :
 		return redirect('polls:login')
 
@@ -661,9 +752,32 @@ def student_profile(request):
 		student_id = request.POST["studentid"]
 		documents = Document.objects.filter(StudentID=student_id)
 		student = Students.objects.get(StudentID=student_id)
-		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'edit':0})
+		student_pic = StudentPic.objects.get(StudentID=student_id)
+		student1 = model_to_dict(student_pic)
+		url_of_image = student1['docfile']
+
+		url_of_image = str(url_of_image)
+		url_of_image = '/media/' + url_of_image
+		print("kjskasjk",url_of_image)
+		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'edit':0,'url_of_image':url_of_image})
 	else:
 		return redirect('polls:instructor_home')
+
+def instructor_profile(request):
+	if request.method == 'POST':
+		instructor_id = request.POST["instructorid"]
+		documents = InstDoc.objects.filter(InstructorID=instructor_id)
+		instructor = Instructors.objects.get(InstructorID=instructor_id)
+		instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+		instructor1 = model_to_dict(instructor_pic)
+		url_of_image = instructor1['docfile']
+
+		url_of_image = str(url_of_image)
+		url_of_image = '/media/' + url_of_image
+		print("kjskasjk",url_of_image)
+		return render(request,'polls/instructor_edit_profile.html',{'documents':documents,'instructor':instructor,'edit':0,'url_of_image':url_of_image})
+	else:
+		return redirect('polls:student_home')
 
 def student_edit_profile(request):
 	if request.method == 'POST':
@@ -671,27 +785,150 @@ def student_edit_profile(request):
 		documents = Document.objects.filter(StudentID=student_id)
 		student = Students.objects.get(StudentID=student_id)
 		form = DocumentForm(request.POST, request.FILES)
-		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'form':form,'status':0,'edit':1})
+		student_pic = StudentPic.objects.get(StudentID=student_id)
+		student1 = model_to_dict(student_pic)
+		url_of_image = student1['docfile']
+
+		url_of_image = str(url_of_image)
+		url_of_image = '/media/' + url_of_image
+		print("kjskasjk",url_of_image)
+		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'form':form,'status':0,'edit':1,'url_of_image':url_of_image})
+	else:
+		return redirect('polls:student_home')
+
+def instructor_edit_profile(request):
+	if request.method == 'POST':
+		instructor_id = request.session['inst']
+		documents = InstDoc.objects.filter(InstructorID=instructor_id)
+		instructor = Instructors.objects.get(InstructorID=instructor_id)
+		form = DocumentForm(request.POST, request.FILES)
+		instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+		instructor1 = model_to_dict(instructor_pic)
+		url_of_image = instructor1['docfile']
+
+		url_of_image = str(url_of_image)
+		url_of_image = '/media/' + url_of_image
+		print("kjskasjk",url_of_image)
+		return render(request,'polls/instructor_edit_profile.html',{'documents':documents,'instructor':instructor,'form':form,'status':0,'edit':1,'url_of_image':url_of_image})
+	else:
+		return redirect('polls:instructor_home')
+
+def instructor_update_profile(request):
+	if request.method == 'POST':
+		instructor_id = request.session['inst']
+		research = request.POST["research"]
+		Instructors.objects.filter(InstructorID=instructor_id).update(research = research)
+		documents = InstDoc.objects.filter(InstructorID=instructor_id)
+		instructor = Instructors.objects.get(InstructorID=instructor_id)
+		form = DocumentForm(request.POST, request.FILES)
+		instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+		instructor1 = model_to_dict(instructor_pic)
+		url_of_image = instructor1['docfile']
+
+		url_of_image = str(url_of_image)
+		url_of_image = '/media/' + url_of_image
+		print("kjskasjk",url_of_image)
+		return render(request,'polls/instructor_edit_profile.html',{'documents':documents,'instructor':instructor,'form':form,'status':0,'edit':1,'url_of_image':url_of_image})
+	else:
+		return redirect('polls:instructor_home')
+
+def student_update_profile(request):
+	if request.method == 'POST':
+		student_id = request.session['stud']
+		research = request.POST["interests"]
+		Students.objects.filter(StudentID=student_id).update(Interests = research)
+		documents = Document.objects.filter(StudentID=student_id)
+		student = Students.objects.get(StudentID=student_id)
+		form = DocumentForm(request.POST, request.FILES)
+		student_pic = StudentPic.objects.get(StudentID=student_id)
+		student1 = model_to_dict(student_pic)
+		url_of_image = student1['docfile']
+
+		url_of_image = str(url_of_image)
+		url_of_image = '/media/' + url_of_image
+		print("kjskasjk",url_of_image)
+		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'form':form,'status':0,'edit':1,'url_of_image':url_of_image})
 	else:
 		return redirect('polls:student_home')
 
 def list(request):
 	if request.method == 'POST':
-		form = DocumentForm(request.POST, request.FILES)
-		print("ajsas")
-		print(form)
-		student_id=request.session['stud']
-		status=0
-		student = Students.objects.get(StudentID=student_id)
-		if form.is_valid():
-			Document.objects.filter(StudentID=student_id).delete()
-			newdoc = Document(docfile = request.FILES['docfile'],StudentID=student_id)
-			newdoc.save()
-			print(newdoc)
-			status = 1
-		documents = Document.objects.filter(StudentID=student_id)
-		print(documents)
-		return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'form':form,'status':status,'edit':1})
+		if request.session.get('stud') != None:
+			img_or_file = request.POST["img_or_file"]
+			form = DocumentForm(request.POST, request.FILES)
+			print("ajsas")
+			print(form)
+			print(request.POST)
+			print(request.FILES)
+			student_id=request.session['stud']
+			status=0
+			student = Students.objects.get(StudentID=student_id)
+			if img_or_file=='0':
+				if form.is_valid():
+					Document.objects.filter(StudentID=student_id).delete()
+					newdoc = Document(docfile = request.FILES['docfile'],StudentID=student_id)
+					newdoc.save()
+					print(newdoc)
+					status = 1
+				documents = Document.objects.filter(StudentID=student_id)
+				print("kjksjaksksdjskdskd",documents[0].docfile.url)
+				print(documents)
+			else:
+				if form.is_valid():
+					StudentPic.objects.filter(StudentID=student_id).delete()
+					newdoc = StudentPic(docfile = request.FILES['docfile'],StudentID=student_id)
+					newdoc.save()
+					print(newdoc)
+					status = 1
+				documents = Document.objects.filter(StudentID=student_id)
+				print(documents)
+			student_pic = StudentPic.objects.get(StudentID=student_id)
+			student1 = model_to_dict(student_pic)
+			url_of_image = student1['docfile']
+
+			url_of_image = str(url_of_image)
+			url_of_image = '/media/' + url_of_image
+			print("kjskasjk",url_of_image)
+			return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'form':form,'status':status,'edit':1,'url_of_image':url_of_image})
+			# return render(request,'polls/student_edit_profile.html',{'documents':documents,'student':student,'form':form,'status':status,'edit':1})
+		else:
+			img_or_file = request.POST["img_or_file"]
+			form = DocumentForm(request.POST, request.FILES)
+			print("ajsas")
+			print(form)
+			print(request.POST)
+			print(request.FILES)
+			instructor_id=request.session['inst']
+			status=0
+			instructor = Instructors.objects.get(InstructorID=instructor_id)
+			if img_or_file=='0':
+				if form.is_valid():
+					InstDoc.objects.filter(InstructorID=instructor_id).delete()
+					newdoc = InstDoc(docfile = request.FILES['docfile'],InstructorID=instructor_id)
+					newdoc.save()
+					print(newdoc)
+					status = 1
+				documents = InstDoc.objects.filter(InstructorID=instructor_id)
+				print("kjksjaksksdjskdskd",documents[0].docfile.url)
+				print(documents)
+			else:
+				if form.is_valid():
+					InstructorPic.objects.filter(InstructorID=instructor_id).delete()
+					newdoc = InstructorPic(docfile = request.FILES['docfile'],InstructorID=instructor_id)
+					newdoc.save()
+					print(newdoc)
+					status = 1
+				documents = InstDoc.objects.filter(InstructorID=instructor_id)
+				print(documents)
+			instructor_pic = InstructorPic.objects.get(InstructorID=instructor_id)
+			instructor1 = model_to_dict(instructor_pic)
+			url_of_image = instructor1['docfile']
+
+			url_of_image = str(url_of_image)
+			url_of_image = '/media/' + url_of_image
+			print("kjskasjk",url_of_image)
+			return render(request,'polls/instructor_edit_profile.html',{'documents':documents,'instructor':instructor,'form':form,'status':status,'edit':1,'url_of_image':url_of_image})
+			
 	else:
 		return redirect('polls:student_home')
 	

@@ -12,14 +12,29 @@ class Students(models.Model):
 	Interests = models.CharField(max_length=40,default='')
 	Branch = models.CharField(max_length=20,default='')
 
+class StudentPic(models.Model):
+	docfile = models.FileField(upload_to='documents/%Y/%m/%d')
+	StudentID = models.CharField(max_length=10,default='')
+
+class InstructorPic(models.Model):
+	docfile = models.FileField(upload_to='documents/%Y/%m/%d')
+	InstructorID = models.CharField(max_length=10,default='')
+
+		
 class Document(models.Model):
 	docfile = models.FileField(upload_to='documents/%Y/%m/%d')
 	StudentID = models.CharField(max_length=10,default='')
+
+class InstDoc(models.Model):
+	docfile = models.FileField(upload_to='documents/%Y/%m/%d')
+	InstructorID = models.CharField(max_length=10,default='')
 
 class Instructors(models.Model):
 	InstructorID = models.CharField(max_length=10,default='')
 	Name = models.CharField(max_length=30,default='')
 	Password = models.CharField(max_length=20,default='')
+	Branch = models.CharField(max_length=20,default='')
+	research = models.CharField(max_length=40,default='')
 
 class AllProjects(models.Model):
 	InstructorID = models.ForeignKey(Instructors,on_delete=models.CASCADE)

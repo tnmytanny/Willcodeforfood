@@ -54,17 +54,14 @@ img {
     	 <div class="well profile">
             <div class="col-sm-12">
                 <div class="col-xs-12 col-sm-8">
-                    <h2>{{student.Name}}</h2>
-                    <p><strong>Branch: </strong> {{student.Branch}} </p>
-                    <p><strong>Interests: </strong>
-                        <form action={% url "polls:student_update_profile" %} method="post">
+                    <h2>{{instructor.Name}}</h2>
+                    <p><strong>Branch: </strong> {{instructor.Branch}} </p>
+                    <p><strong>Field of research: </strong>
+                        <form action={% url "polls:instructor_update_profile" %} method="post">
                             {% csrf_token %}
-                        <input type="text" name ="interests" class="tags" value={{student.Interests}}>
+                        <input type="text" name ="research" class="tags" value={{instructor.research}}>
                         <input type="submit" value="Save"/>
                         </form>
-                    </p>
-                    <p>CPI:
-                    {{student.CPI}} 
                     </p>
                 </div>             
                 <div class="col-xs-12 col-sm-4 text-center">

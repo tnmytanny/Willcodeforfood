@@ -296,7 +296,7 @@
 						<li class="active">
 							<div class="d-flex bd-highlight">
 								<div class="img_cont">
-									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
+									<img src={{url_of_image}} class="rounded-circle user_img">
 									<span class="online_icon"></span>
 								</div>
 								<div class="user_info">
@@ -328,7 +328,7 @@
 						<li class="active">
 							<div class="d-flex bd-highlight">
 								<div class="img_cont">
-									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
+									<img src={{url_of_image}} class="rounded-circle user_img">
 									<span class="online_icon"></span>
 								</div>
 								<div class="user_info">
@@ -402,7 +402,7 @@
 						<div class="card-header msg_head">
 							<div class="d-flex bd-highlight">
 								<div class="img_cont">
-									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img">
+									<img src={{url_of_image}} class="rounded-circle user_img">
 									<span class="online_icon"></span>
 								</div>
 								<div class="user_info">
@@ -429,6 +429,13 @@
 							      	{{ form }}
 							      	<input id="studentid" type="hidden" name="studentid" value={{studentid}}>
       								<input type="submit" value="View profile"></form></li>
+      								{% elif loginid == 'S' %}
+									<li><form action={% url 'polls:instructor_profile' %} method="post"><i class="fas fa-user-circle"></i>
+									{% csrf_token %}
+							      	{{ form }}
+							      	<input id="instructorid" type="hidden" name="instructorid" value={{instructorid}}>
+      								<input type="submit" value="View profile"></form></li>
+      								
       								{% endif %}
       								<li><form action={% url 'polls:logout' %} method="post"><i class="fas fa-user-circle"></i>
 									{% csrf_token %}
@@ -447,13 +454,13 @@
 									<span class="msg_time_send">{{messages.timestamp}}</span>
 								</div>
 								<div class="img_cont_msg">
-							<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img_msg">
+							<img src={{myimage}} class="rounded-circle user_img_msg">
 								</div>
 							</div>
 							{% elif messages.SenderID == 'I' %}
 							<div class="d-flex justify-content-start mb-4">
 								<div class="img_cont_msg">
-									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img_msg">
+									<img src={{url_of_image}} class="rounded-circle user_img_msg">
 								</div>
 								<div class="msg_cotainer">
 									{{messages.message}}
@@ -465,7 +472,7 @@
 							{% if messages.SenderID == 'S' %}
     						<div class="d-flex justify-content-start mb-4">
 								<div class="img_cont_msg">
-									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img_msg">
+									<img src={{url_of_image}} class="rounded-circle user_img_msg">
 								</div>
 								<div class="msg_cotainer">
 									{{messages.message}}
@@ -479,7 +486,7 @@
 									<span class="msg_time_send">{{messages.timestamp}}</span>
 								</div>
 								<div class="img_cont_msg">
-									<img src="http://profilepicturesdp.com/wp-content/uploads/2018/06/avatars-profile-picture-5.png" class="rounded-circle user_img_msg">
+									<img src={{myimage}} class="rounded-circle user_img_msg">
 								</div>
 							</div>
 							{% endif %}
