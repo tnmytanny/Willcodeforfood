@@ -287,7 +287,11 @@
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Closed Projects">
+      <!-- <input type="submit" value="Closed Projects"> -->
+      <button class="btn btn-default btn-sm button2">
+        <span class="glyphicon glyphicon-th-list"></span> Closed Projects
+    </button>
+
 </form>
 
 <form action={% url 'polls:instructor_show_messages' %} method="post">
@@ -310,7 +314,11 @@
       <!-- <label for="UserID">UserID: </label> -->
       <input id="studentid" type="text" name="studentid">
       <!-- <input id="password" type="text" name="password"> -->
-      <input type="submit" value="Create Chat">
+      <!-- <input type="submit" value="Create Chat"> -->
+      <button class="btn btn-default btn-sm button2">
+        <span class="glyphicon glyphicon-pencil"></span> Create Chat
+    </button>
+
 </form>
 <p class="show" onclick="myFunction()"><b>Click to change password</b></p>
 <div id="mydiv" class="myclass">
