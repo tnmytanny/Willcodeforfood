@@ -2,6 +2,8 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
         body {
           background-color: #436145;
@@ -18,23 +20,7 @@
           text-align: center;
           text-transform: uppercase;
         }
-        div.myclass {
-          color: black;
-          display: none;
-        }
-        p.show {
-          /*background-color: #eee;*/
-          color: black;
-          cursor: pointer;
-          padding: 18px;
-          width: 100%;
-          border: none;
-          text-align: left;
-          outline: none;
-          font-size: 15px;
-          transition: 0.1s;
-        }
-
+        
         img {
           border-radius: 50%;
           height: 60px;
@@ -70,7 +56,6 @@
           text-align: left;
         }
         table th {
-          text-align: center;
           background-color: #daeff1;
           font-weight: 300;
         }
@@ -192,51 +177,39 @@
           top:5px;
         }
         .button2 {background-color: #daeff1;}
-        .btn {
-          height: 40px;
-        }
-
-        .viewprof{
-
-        position:fixed;
-        right:100px;
-        top:5px;
-        }
-        .msgpos{
-          position:fixed;
-          right:230px;
-          top:5px;
-        }
+        
+        
         </style>
 <div style="width:400px;">
     <div style="float: left; width: 130px"> 
-      <form action={% url 'polls:instructor_new_project' %} method="post">
-      {% csrf_token %}
+        <form action={% url 'polls:instructor_new_project' %} method="post">
+    {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label> -->
-        <input name="instructorid" type="hidden" value={{instructor_id}}>
-        <button class="btn btn-default btn-sm button2">Add project<i class="w3-margin-left fa fa-plus"></i></button>
-      </form>
+      <input name="instructorid" type="hidden" value={{instructor_id}}>
+      <button class="w3-btn w3-white w3-xmedium button2">Add project<i class="w3-margin-left fa fa-plus"></i></button>
+</form>
     </div>
     <div style="float: right; width: 225px"> 
-        <form action={% url 'polls:login' %} method="post">
+        <form action={% url 'polls:instructor_allocated_projects' %} method="post">
+<!-- >>>>>>> 7c45c867ad1da753d6488073119bbebc94484b9d -->
     {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <button class="btn btn-default btn-sm button2"><i class="w3-margin-middle fa fa-home"></i></button>
+      <button class="w3-btn w3-white w3-xlarge button2"><i class="w3-margin-middle fa fa-home"></i></button>
 </form>
     </div>
   </div>
 <div style="float: middle" class="table-users">
-    <div class="header">Projects</div>
+    <div class="header">Users</div>
  
   <table cellspacing="0">
   <tr>
     <th>Title</th>
+    <th>Project Title</th>
     <th>Details</th>
-    <th>Edit</th>
     <th>Delete Project</th>
     <th>Close Project</th>
   </tr>
@@ -276,6 +249,7 @@
 
 </table>
 </div>
+
 <form action={% url 'polls:logout' %} method="post">
     {% csrf_token %}
       {{ form }}
@@ -288,18 +262,23 @@
       </button>
       </label>
 </form>
+
+<<<<<<< HEAD
+
+<!-- <<<<<<< HEAD -->
+<form action={% url 'polls:instructor_home' %} method="post">
+<!-- ======= -->
+
+=======
 <form action={% url 'polls:instructor_allocated_projects' %} method="post">
     {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <!-- <input type="submit" value="Closed Projects"> -->
-      <button class="btn btn-default btn-sm button2">
-        <span class="glyphicon glyphicon-th-list"></span> Closed Projects
-    </button>
-
+      <input type="submit" value="Closed Projects">
 </form>
+>>>>>>> fd4d152a2e63edf422b87bd9b4abf0af6a40828b
 
 <form action={% url 'polls:instructor_show_messages' %} method="post">
     {% csrf_token %}
@@ -307,37 +286,27 @@
       <!-- <label for="UserID">UserID: </label>
       <input id="UserID" type="text" name="userid">
       <input id="password" type="text" name="password"> -->
-      <label class="msgpos">
-      <!-- <input type="submit" value="Messages"> -->
-      <button class="btn btn-default btn-sm button2">
-          <span class="glyphicon glyphicon-envelope"></span> Messages
-      </button>
-
-    </label>
+      <input type="submit" value="Messages">
 </form>
+
 <form action={% url 'polls:instructor_create_chat' %} method="post">
     {% csrf_token %}
       {{ form }}
       <!-- <label for="UserID">UserID: </label> -->
       <input id="studentid" type="text" name="studentid">
       <!-- <input id="password" type="text" name="password"> -->
-      <!-- <input type="submit" value="Create Chat"> -->
-      <button class="btn btn-default btn-sm button2">
-        <span class="glyphicon glyphicon-pencil"></span> Create Chat
-    </button>
-
+      <input type="submit" value="Create Chat">
 </form>
-<p class="show" onclick="myFunction()"><b>Click to change password</b></p>
-<div id="mydiv" class="myclass">
-  <form action={% url 'polls:change_password' %} method="post">
+<p onclick="myFunction()"><b>To change password</b>
+<form action={% url 'polls:change_password' %} method="post">
     {% csrf_token %}
       {{ form }}
       <label for="oldpass">Enter Old Password: </label>
-      <input id="oldpass" type="password" name="oldpass">
+      <input id="oldpass" type="text" name="oldpass">
       <label for="newpass">Enter New Password: </label>
-      <input id="newpass" type="password" name="newpass">
+      <input id="newpass" type="text" name="newpass">
       <label for="newpassagain">Enter New Password again: </label>
-      <input id="newpassagain" type="password" name="newpassagain">
+      <input id="newpassagain" type="text" name="newpassagain">
       <input type="submit" value="Change Password">
 </form>
 {% if change_pass == 1 %}
@@ -346,26 +315,4 @@ password changed succesfully
 Password entered is incorrect
 {% endif %}
 </p>
-</div>
-<form action={% url 'polls:instructor_edit_profile' %} method="post">
-  {% csrf_token %}
-    {{ form }}
-    
-    <!-- <input type="submit" value="View Profile"> -->
-    <!-- <button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile </button> -->
-    <label class="viewprof">
-    <button class="btn btn-default btn-sm button2">View Profile<i class="w3-margin-left fa fa-user"></i></button>
-</label>
-</form>
-
-<script>
-  function myFunction() {
-    var x = document.getElementById("mydiv");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-</script>
 </html>

@@ -65,13 +65,15 @@ img {
                     </p>
                 </div>             
                 <div class="col-xs-12 col-sm-4 text-center">
+                    {% if edit %}
                     <form action={% url "polls:list" %} method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                         <p>{{ form.docfile }}</p>
                         <input type="hidden" name="img_or_file" value='1'>
-                    <img src="{{url_of_image}}" width="150" height="150">
                     <input class="btn btn-success btn-block" type="submit" value="Upload"/>
                     </form>
+                    {% endif %}
+                    <img src="{{url_of_image}}" width="150" height="150">
                 </div>
             </div>            
             <div class="col-xs-12 divider text-center">
